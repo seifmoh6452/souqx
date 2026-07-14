@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, Download, Copy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
 import { getAllProducts } from '../data/products'
@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [saved, setSaved] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [filterBrand, setFilterBrand] = useState('')
+  const [showExport, setShowExport] = useState(false)
   const [, setRefresh] = useState(0)
 
   const brand = brands.find(b => b.slug === brandSlug)
@@ -117,6 +118,11 @@ export default function AdminPage() {
     if (editingId === id) resetForm()
     setRefresh(r => r + 1)
   }
+
+  const customProducts = getCustomProducts()
+  const exportCode = customProducts.length > 0
+    ? `// Add these to src/data/products.ts inside the products array\n${customProducts.map(p => `  { id:'${p.id}', brandId:'${p.brandId}', brandName:'${p.brandName}', brandSlug:'${p.brandSlug}', name:'${p.name}', price:${p.price}, currency:'EGP', category:'${p.category}', images:[${p.images.map(i => `'${i}'`).join(', ')}], description:'${p.description.replace(/'/g, "\\'")}', ${p.sizes ? `sizes:[${p.sizes.map(s => `'${s}'`).join(', ')}], ` : ''}inStock:true, whatsappNumber:'${p.whatsappNumber}' },`).join('\n')}`
+    : ''
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
@@ -269,6 +275,33 @@ export default function AdminPage() {
             </motion.button>
           </div>
         </div>
+
+        {/* Export section */}
+        {customProducts.length > 0 && (
+          <div className="mb-8">
+            <button
+              onClick={() => setShowExport(!showExport)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent text-sm font-semibold hover:bg-accent/20 transition-all"
+            >
+              <Download size={15} />
+              {showExport ? 'Hide' : 'Export'} {customProducts.length} custom product(s) as code
+            </button>
+            {showExport && (
+              <div className="mt-3 relative">
+                <pre className="bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-4 text-[11px] text-green-400 overflow-x-auto max-h-64 overflow-y-auto font-mono whitespace-pre-wrap break-all">
+                  {exportCode}
+                </pre>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(exportCode); setSaved(true); setTimeout(() => setSaved(false), 2000) }}
+                  className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-bg text-[11px] font-bold hover:bg-accent-hover transition-all"
+                >
+                  <Copy size={12} />
+                  {saved ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Products grouped by brand */}
         <div>
