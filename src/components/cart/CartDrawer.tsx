@@ -1,35 +1,22 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Minus, Plus, ShoppingBag, Trash2, MessageCircle } from 'lucide-react'
+import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../../context/CartContext'
 
 export default function CartDrawer() {
   const { state, closeCart, removeItem, updateQuantity, totalPrice, clearCart } = useCart()
+  const navigate = useNavigate()
 
   useEffect(() => {
     document.body.style.overflow = state.isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [state.isOpen])
 
-  const handleWhatsAppCheckout = () => {
+  const handleCheckout = () => {
     if (state.items.length === 0) return
-    const lines = state.items.map(item => {
-      const price = getItemPrice(item.product, item.copyType)
-      const copyLabel = item.copyType === 'high-copy' ? ' (High Copy)' : item.copyType === 'master-box' ? ' (Master Box)' : ''
-      return `• ${item.product.brandName} – ${item.product.name}${copyLabel}${item.selectedSize ? ` (${item.selectedSize})` : ''}${item.selectedColor ? `, ${item.selectedColor}` : ''} × ${item.quantity} = ${(price * item.quantity).toLocaleString()} EGP`
-    })
-    const message = [
-      '🛍️ *SOUQX Order*',
-      '',
-      ...lines,
-      '',
-      `*Total: ${totalPrice.toLocaleString()} EGP*`,
-      '',
-      'Please confirm my order. Thank you!',
-    ].join('\n')
-
-    const number = state.items[0]?.product.whatsappNumber.replace(/\D/g, '') || ''
-    window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`, '_blank')
+    closeCart()
+    navigate('/checkout')
   }
 
   return (
@@ -164,14 +151,14 @@ export default function CartDrawer() {
                   <span className="text-muted text-sm">Subtotal</span>
                   <span className="text-white font-bold text-lg">{totalPrice.toLocaleString()} EGP</span>
                 </div>
-                <p className="text-[11px] text-muted">Shipping calculated at checkout via WhatsApp</p>
+                <p className="text-[11px] text-muted">Shipping calculated at checkout</p>
                 <motion.button
                   whileTap={{ scale: 0.98 }}
-                  onClick={handleWhatsAppCheckout}
-                  className="w-full py-4 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors min-h-[52px]"
+                  onClick={handleCheckout}
+                  className="w-full py-4 bg-accent hover:bg-accent-hover text-bg font-bold rounded-2xl flex items-center justify-center gap-2 transition-colors min-h-[52px]"
                 >
-                  <MessageCircle size={18} />
-                  Checkout via WhatsApp
+                  <ShoppingBag size={18} />
+                  Checkout
                 </motion.button>
                 <button
                   onClick={clearCart}

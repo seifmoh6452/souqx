@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, ShoppingBag, MessageCircle, Heart, Minus, Plus } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, ShoppingBag, Heart, Minus, Plus } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { useCart, getItemPrice, type CopyType } from '../../context/CartContext'
 import { getAllProducts } from '../../data/products'
@@ -46,22 +46,6 @@ export default function ProductModal({ product, onClose }: Props) {
     addItem(product, selectedSize || undefined, selectedColor || undefined, copyType)
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 2000)
-  }
-
-  const handleWhatsApp = () => {
-    const copyLabel = copyType === 'high-copy' ? ' (High Copy)' : copyType === 'master-box' ? ' (Master Box)' : ''
-    const msg = [
-      `Hi! I'm interested in ordering:`,
-      `*${product.brandName} – ${product.name}${copyLabel}*`,
-      selectedSize ? `Size: ${selectedSize}` : '',
-      selectedColor ? `Color: ${selectedColor}` : '',
-      `Quantity: ${quantity}`,
-      `Price: ${(displayPrice * quantity).toLocaleString()} EGP`,
-      '',
-      'Please confirm availability. Thank you!'
-    ].filter(Boolean).join('\n')
-    const number = product.whatsappNumber.replace(/\D/g, '')
-    window.open(`https://wa.me/${number}?text=${encodeURIComponent(msg)}`, '_blank')
   }
 
   return (
@@ -347,14 +331,6 @@ export default function ProductModal({ product, onClose }: Props) {
                 >
                   <ShoppingBag size={18} />
                   {addedToCart ? 'Added to Cart!' : 'Add to Cart'}
-                </motion.button>
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleWhatsApp}
-                  className="w-full py-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] border border-[#25D366]/30 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all min-h-[52px]"
-                >
-                  <MessageCircle size={18} />
-                  Buy via WhatsApp
                 </motion.button>
               </div>
             </div>
