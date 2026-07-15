@@ -1,6 +1,5 @@
-const API_KEY = '$2a$10$j537pExPqJpYsqqE7by6dezd63I6cMSLWUShmVmXoRO6ZC8l1FDnS'
-const API_BASE = 'https://api.jsonbin.io/v3'
-const BIN_ID_KEY = 'souqx_orders_bin_id'
+const SUPABASE_URL = 'https://fftiqtfuphzxjcsrrbbg.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_mNq8ThTap5g3Xa_2sddwiw_1hYOG0bA'
 
 export interface OrderItem {
   name: string
@@ -21,67 +20,55 @@ export interface Order {
   items: OrderItem[]
   total: number
   date: string
-}
-
-function getBinId(): string | null {
-  return localStorage.getItem(BIN_ID_KEY)
-}
-
-function setBinId(id: string) {
-  localStorage.setItem(BIN_ID_KEY, id)
-}
-
-async function createBin(orders: Order[]): Promise<string> {
-  const res = await fetch(`${API_BASE}/b`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': API_KEY,
-      'X-Bin-Name': 'souqx-orders',
-    },
-    body: JSON.stringify(orders),
-  })
-  const data = await res.json()
-  setBinId(data.metadata.id)
-  return data.metadata.id
-}
-
-async function updateBin(binId: string, orders: Order[]) {
-  await fetch(`${API_BASE}/b/${binId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': API_KEY,
-    },
-    body: JSON.stringify(orders),
-  })
+  status?: string
 }
 
 export async function saveOrder(order: Order): Promise<void> {
-  const binId = getBinId()
-  if (binId) {
-    try {
-      const existing = await getOrders()
-      existing.push(order)
-      await updateBin(binId, existing)
-      return
-    } catch {
-      const newBinId = await createBin([order])
-      setBinId(newBinId)
-      return
-    }
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({
+      id: order.id,
+      customer_name: order.customerName,
+      customer_phone: order.customerPhone,
+      address: order.address,
+      city: order.city,
+      notes: order.notes,
+      items: order.items,
+      total: order.total,
+      status: 'pending',
+    }),
+  })
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error(`Failed to save order: ${err}`)
   }
-  const newBinId = await createBin([order])
-  setBinId(newBinId)
 }
 
 export async function getOrders(): Promise<Order[]> {
-  const binId = getBinId()
-  if (!binId) return []
-  const res = await fetch(`${API_BASE}/b/${binId}/latest`, {
-    headers: { 'X-Master-Key': API_KEY },
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?order=created_at.desc`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+    },
   })
   if (!res.ok) throw new Error('Failed to fetch orders')
   const data = await res.json()
-  return Array.isArray(data.record) ? data.record : []
+  return data.map((row: Record<string, unknown>) => ({
+    id: row.id as string,
+    customerName: row.customer_name as string,
+    customerPhone: row.customer_phone as string,
+    address: row.address as string,
+    city: row.city as string,
+    notes: row.notes as string || '',
+    items: row.items as OrderItem[],
+    total: row.total as number,
+    date: row.created_at as string,
+    status: row.status as string,
+  }))
 }
