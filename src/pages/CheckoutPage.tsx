@@ -47,7 +47,7 @@ export default function CheckoutPage() {
     ].filter(Boolean).join('\n')
 
     const url = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(message)}&apikey=${CALLMEBOT_API_KEY}`
-    fetch(url).catch(() => {})
+    fetch(url, { mode: 'no-cors' }).catch(() => {})
 
     saveOrder({
       id: Date.now().toString(),
