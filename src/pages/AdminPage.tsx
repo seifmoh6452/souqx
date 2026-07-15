@@ -84,7 +84,7 @@ export default function AdminPage() {
         brandSlug: brand.slug,
         name,
         price: Number(price),
-        currency: 'EGP',
+        currency: 'USD',
         category: brand.category,
         images,
         description: description || `${name} from ${brand.name}`,
@@ -120,14 +120,10 @@ export default function AdminPage() {
   }
 
   const customProducts = getCustomProducts()
-  const exportCode = customProducts.length > 0
-    ? `// Add these to src/data/products.ts inside the products array\n${customProducts.map(p => `  { id:'${p.id}', brandId:'${p.brandId}', brandName:'${p.brandName}', brandSlug:'${p.brandSlug}', name:'${p.name}', price:${p.price}, currency:'EGP', category:'${p.category}', images:[${p.images.map(i => `'${i}'`).join(', ')}], description:'${p.description.replace(/'/g, "\\'")}', ${p.sizes ? `sizes:[${p.sizes.map(s => `'${s}'`).join(', ')}], ` : ''}inStock:true, whatsappNumber:'${p.whatsappNumber}' },`).join('\n')}`
-    : ''
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
       <div className="max-w-2xl mx-auto px-4">
-        {/* Back */}
         <Link to="/">
           <motion.div whileHover={{ x: -4 }} className="flex items-center gap-2 text-muted hover:text-white text-sm font-semibold mb-8 w-fit transition-colors">
             <ArrowLeft size={15} />
@@ -138,9 +134,7 @@ export default function AdminPage() {
         <h1 className="text-3xl font-black text-white mb-2">{editingId ? 'Edit Product' : 'Add Product'}</h1>
         <p className="text-muted text-sm mb-8">{editingId ? 'Update the product details below.' : 'Add a product to any brand. It will appear on the live site immediately.'}</p>
 
-        {/* Form */}
         <div className="space-y-5 bg-card border border-white/[0.06] rounded-2xl p-6 mb-10">
-          {/* Brand */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Brand</label>
             <select
@@ -155,7 +149,6 @@ export default function AdminPage() {
             </select>
           </div>
 
-          {/* Front Image */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Front Image</label>
             <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors overflow-hidden">
@@ -171,7 +164,6 @@ export default function AdminPage() {
             </label>
           </div>
 
-          {/* Back Image */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Back Image (optional)</label>
             <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors overflow-hidden">
@@ -187,7 +179,6 @@ export default function AdminPage() {
             </label>
           </div>
 
-          {/* Name */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Product Name</label>
             <input
@@ -199,19 +190,17 @@ export default function AdminPage() {
             />
           </div>
 
-          {/* Price */}
           <div>
-            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Price (EGP)</label>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Price (USD)</label>
             <input
               type="number"
               value={price}
               onChange={e => setPrice(e.target.value)}
-              placeholder="e.g. 950"
+              placeholder="e.g. 50"
               className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm placeholder-muted focus:outline-none focus:border-accent/40"
             />
           </div>
 
-          {/* Description */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Description (optional)</label>
             <textarea
@@ -223,7 +212,6 @@ export default function AdminPage() {
             />
           </div>
 
-          {/* Sizes */}
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Sizes (optional)</label>
             <div className="flex gap-2">
@@ -244,7 +232,6 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-3">
             {editingId && (
               <motion.button
@@ -276,7 +263,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Export section */}
         {customProducts.length > 0 && (
           <div className="mb-8">
             <button
@@ -284,26 +270,25 @@ export default function AdminPage() {
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent text-sm font-semibold hover:bg-accent/20 transition-all"
             >
               <Download size={15} />
-              {showExport ? 'Hide' : 'Export'} {customProducts.length} custom product(s) as code
+              {showExport ? 'Hide' : 'Export'} {customProducts.length} custom product(s)
             </button>
             {showExport && (
-              <div className="mt-3 relative">
+              <div className="mt-3">
                 <pre className="bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-4 text-[11px] text-green-400 overflow-x-auto max-h-64 overflow-y-auto font-mono whitespace-pre-wrap break-all">
-                  {exportCode}
+                  {JSON.stringify(customProducts.map(p => ({ name: p.name, price: p.price, description: p.description, sizes: p.sizes, brandSlug: p.brandSlug })), null, 2)}
                 </pre>
                 <button
-                  onClick={() => { navigator.clipboard.writeText(exportCode); setSaved(true); setTimeout(() => setSaved(false), 2000) }}
-                  className="absolute top-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-bg text-[11px] font-bold hover:bg-accent-hover transition-all"
+                  onClick={() => { navigator.clipboard.writeText(JSON.stringify(customProducts, null, 2)); setSaved(true); setTimeout(() => setSaved(false), 2000) }}
+                  className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-bg text-[11px] font-bold hover:bg-accent-hover transition-all"
                 >
                   <Copy size={12} />
-                  {saved ? 'Copied!' : 'Copy'}
+                  {saved ? 'Copied!' : 'Copy All Data'}
                 </button>
               </div>
             )}
           </div>
         )}
 
-        {/* Products grouped by brand */}
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-white">All Products ({filteredProducts.length})</h2>
