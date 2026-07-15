@@ -12,8 +12,7 @@ export default function AdminPage() {
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [backImagePreview, setBackImagePreview] = useState('')
+  const [images, setImages] = useState<string[]>([])
   const [sizes, setSizes] = useState<string[]>([])
   const [saved, setSaved] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -29,20 +28,28 @@ export default function AdminPage() {
     ? allProducts.filter(p => p.brandSlug === filterBrand)
     : allProducts
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setImagePreview(reader.result as string)
-    reader.readAsDataURL(file)
+  const handleImageAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+    Array.from(files).forEach(file => {
+      const reader = new FileReader()
+      reader.onload = () => setImages(prev => [...prev, reader.result as string])
+      reader.readAsDataURL(file)
+    })
+    e.target.value = ''
   }
 
-  const handleBackImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setBackImagePreview(reader.result as string)
-    reader.readAsDataURL(file)
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const moveImage = (from: number, to: number) => {
+    setImages(prev => {
+      const next = [...prev]
+      const [moved] = next.splice(from, 1)
+      next.splice(to, 0, moved)
+      return next
+    })
   }
 
   const resetForm = () => {
@@ -50,17 +57,14 @@ export default function AdminPage() {
     setName('')
     setPrice('')
     setDescription('')
-    setImagePreview('')
-    setBackImagePreview('')
+    setImages([])
     setSizes([])
     setEditingId(null)
   }
 
   const handleSubmit = async () => {
-    if (!brand || !name || !price || !imagePreview) return
+    if (!brand || !name || !price || images.length === 0) return
     setLoading(true)
-
-    const images = [imagePreview, ...(backImagePreview ? [backImagePreview] : [])]
 
     try {
       if (editingId) {
@@ -115,8 +119,7 @@ export default function AdminPage() {
     setName(product.name)
     setPrice(String(product.price))
     setDescription(product.description)
-    setImagePreview(product.images[0] || '')
-    setBackImagePreview(product.images[1] || '')
+    setImages([...product.images])
     setSizes(product.sizes || [])
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -169,32 +172,57 @@ export default function AdminPage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Front Image</label>
-            <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors overflow-hidden">
-              {imagePreview ? (
-                <img src={imagePreview} alt="Front preview" className="w-full h-full object-cover" />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-muted">
-                  <Upload size={24} />
-                  <span className="text-sm">Click to upload front image</span>
-                </div>
-              )}
-              <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">
+              Product Images ({images.length})
             </label>
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Back Image (optional)</label>
-            <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors overflow-hidden">
-              {backImagePreview ? (
-                <img src={backImagePreview} alt="Back preview" className="w-full h-full object-cover" />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-muted">
-                  <Upload size={24} />
-                  <span className="text-sm">Click to upload back image</span>
-                </div>
-              )}
-              <input type="file" accept="image/*" onChange={handleBackImageChange} className="hidden" />
+            {images.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {images.map((img, i) => (
+                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-white/[0.08] group">
+                    <img src={img} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
+                    {i === 0 && (
+                      <span className="absolute top-1 left-1 text-[9px] font-bold text-accent bg-black/70 rounded px-1 py-0.5">Main</span>
+                    )}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                      {i > 0 && (
+                        <button
+                          onClick={() => moveImage(i, i - 1)}
+                          className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
+                        >
+                          &#8592;
+                        </button>
+                      )}
+                      <button
+                        onClick={() => removeImage(i)}
+                        className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/20 backdrop-blur text-red-400 hover:bg-red-500/30 text-xs"
+                      >
+                        &#10005;
+                      </button>
+                      {i < images.length - 1 && (
+                        <button
+                          onClick={() => moveImage(i, i + 1)}
+                          className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
+                        >
+                          &#8594;
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors">
+              <div className="flex flex-col items-center gap-2 text-muted">
+                <Upload size={24} />
+                <span className="text-sm">{images.length === 0 ? 'Click to upload images (up to 10)' : 'Add more images'}</span>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageAdd}
+                className="hidden"
+              />
             </label>
           </div>
 
@@ -267,11 +295,11 @@ export default function AdminPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleSubmit}
-              disabled={!brand || !name || !price || !imagePreview || loading}
+              disabled={!brand || !name || !price || images.length === 0 || loading}
               className={`flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                 saved
                   ? 'bg-accent/20 text-accent border border-accent/30'
-                  : brand && name && price && imagePreview
+                  : brand && name && price && images.length > 0
                     ? 'bg-accent hover:bg-accent-hover text-bg'
                     : 'bg-white/[0.06] text-muted cursor-not-allowed'
               }`}
