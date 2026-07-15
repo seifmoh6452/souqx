@@ -10,6 +10,7 @@ import BecomeSellerPage from './pages/BecomeSellerPage'
 import AdminPage from './pages/AdminPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ShopPage from './pages/ShopPage'
+import AnalyticsPage from './pages/AnalyticsPage'
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -30,6 +31,7 @@ function AnimatedRoutes() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/admin/analytics" element={<AnalyticsPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

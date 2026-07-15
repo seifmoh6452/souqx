@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, Download, Copy } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, Download, Copy, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
 import { getAllProducts } from '../data/products'
@@ -124,12 +124,20 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
       <div className="max-w-2xl mx-auto px-4">
-        <Link to="/">
-          <motion.div whileHover={{ x: -4 }} className="flex items-center gap-2 text-muted hover:text-white text-sm font-semibold mb-8 w-fit transition-colors">
-            <ArrowLeft size={15} />
-            Back to Store
-          </motion.div>
-        </Link>
+        <div className="flex items-center justify-between mb-8">
+          <Link to="/">
+            <motion.div whileHover={{ x: -4 }} className="flex items-center gap-2 text-muted hover:text-white text-sm font-semibold transition-colors">
+              <ArrowLeft size={15} />
+              Back to Store
+            </motion.div>
+          </Link>
+          <Link to="/admin/analytics">
+            <motion.div whileHover={{ x: 4 }} className="flex items-center gap-2 text-accent hover:text-accent/80 text-sm font-semibold transition-colors">
+              Order Analytics
+              <TrendingUp size={15} />
+            </motion.div>
+          </Link>
+        </div>
 
         <h1 className="text-3xl font-black text-white mb-2">{editingId ? 'Edit Product' : 'Add Product'}</h1>
         <p className="text-muted text-sm mb-8">{editingId ? 'Update the product details below.' : 'Add a product to any brand. It will appear on the live site immediately.'}</p>

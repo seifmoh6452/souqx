@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
+import { saveOrder } from '../lib/orders'
 
 const WHATSAPP_PHONE = '201111273593'
 const CALLMEBOT_API_KEY = '4725541'
@@ -47,6 +48,25 @@ export default function CheckoutPage() {
 
     const url = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(message)}&apikey=${CALLMEBOT_API_KEY}`
     fetch(url).catch(() => {})
+
+    saveOrder({
+      id: Date.now().toString(),
+      customerName: form.name,
+      customerPhone: form.phone,
+      address: form.address,
+      city: form.city,
+      notes: form.notes,
+      items: state.items.map(item => ({
+        name: item.product.name,
+        brandName: item.product.brandName,
+        copyType: item.copyType,
+        size: item.selectedSize,
+        price: getItemPrice(item.product, item.copyType),
+        quantity: item.quantity,
+      })),
+      total: totalPrice,
+      date: new Date().toISOString(),
+    }).catch(() => {})
 
     clearCart()
     setSubmitted(true)
