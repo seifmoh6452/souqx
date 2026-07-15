@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CartProvider } from './context/CartContext'
@@ -11,6 +12,7 @@ import AdminPage from './pages/AdminPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ShopPage from './pages/ShopPage'
 import AnalyticsPage from './pages/AnalyticsPage'
+import { loadCloudProducts } from './data/products'
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -39,6 +41,10 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  useEffect(() => {
+    loadCloudProducts()
+  }, [])
+
   return (
     <CartProvider>
       <div className="min-h-screen bg-bg text-white">

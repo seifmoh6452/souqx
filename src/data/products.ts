@@ -1,5 +1,5 @@
 import { mymPerfumes } from './mym-perfumes'
-import { getCustomProducts } from './custom-products'
+import { fetchSupabaseProducts } from '../lib/products-db'
 
 export interface Product {
   id: string
@@ -115,8 +115,23 @@ export const products: Product[] = [
   ...modestaProducts,
 ]
 
+let cloudProducts: Product[] = []
+
+export async function loadCloudProducts(): Promise<Product[]> {
+  try {
+    cloudProducts = await fetchSupabaseProducts()
+  } catch {
+    cloudProducts = []
+  }
+  return cloudProducts
+}
+
+export function getCloudProducts(): Product[] {
+  return cloudProducts
+}
+
 export function getAllProducts(): Product[] {
-  return [...products, ...getCustomProducts()]
+  return [...products, ...cloudProducts]
 }
 
 export const getTrendingProducts = () => getAllProducts().filter(p => p.trending)

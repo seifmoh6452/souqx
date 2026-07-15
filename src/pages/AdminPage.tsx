@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, Download, Copy, TrendingUp } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
-import { getAllProducts } from '../data/products'
-import { addCustomProduct, updateCustomProduct, removeCustomProduct, getCustomProducts } from '../data/custom-products'
+import { getAllProducts, getCloudProducts, loadCloudProducts } from '../data/products'
+import { addSupabaseProduct, updateSupabaseProduct, deleteSupabaseProduct } from '../lib/products-db'
 import type { Product } from '../data/products'
 
 export default function AdminPage() {
@@ -18,12 +18,12 @@ export default function AdminPage() {
   const [saved, setSaved] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [filterBrand, setFilterBrand] = useState('')
-  const [showExport, setShowExport] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [, setRefresh] = useState(0)
 
   const brand = brands.find(b => b.slug === brandSlug)
   const allProducts = getAllProducts()
-  const customIds = new Set(getCustomProducts().map(p => p.id))
+  const cloudIds = new Set(getCloudProducts().map(p => p.id))
 
   const filteredProducts = filterBrand
     ? allProducts.filter(p => p.brandSlug === filterBrand)
@@ -56,49 +56,57 @@ export default function AdminPage() {
     setEditingId(null)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!brand || !name || !price || !imagePreview) return
+    setLoading(true)
 
     const images = [imagePreview, ...(backImagePreview ? [backImagePreview] : [])]
 
-    if (editingId) {
-      const existing = getCustomProducts().find(p => p.id === editingId)
-      if (existing) {
-        updateCustomProduct({
-          ...existing,
+    try {
+      if (editingId) {
+        const existing = getCloudProducts().find(p => p.id === editingId)
+        if (existing) {
+          await updateSupabaseProduct({
+            ...existing,
+            brandId: brand.id,
+            brandName: brand.name,
+            brandSlug: brand.slug,
+            name,
+            price: Number(price),
+            description: description || `${name} from ${brand.name}`,
+            images,
+            sizes: sizes.length > 0 ? sizes : undefined,
+          })
+        }
+      } else {
+        const newProduct: Product = {
+          id: `custom-${Date.now()}`,
           brandId: brand.id,
           brandName: brand.name,
           brandSlug: brand.slug,
           name,
           price: Number(price),
-          description: description || `${name} from ${brand.name}`,
+          currency: 'EGP',
+          category: brand.category,
           images,
+          description: description || `${name} from ${brand.name}`,
           sizes: sizes.length > 0 ? sizes : undefined,
-        })
+          inStock: true,
+          whatsappNumber: '+201001234567',
+        }
+        await addSupabaseProduct(newProduct)
       }
-    } else {
-      const newProduct: Product = {
-        id: `custom-${Date.now()}`,
-        brandId: brand.id,
-        brandName: brand.name,
-        brandSlug: brand.slug,
-        name,
-        price: Number(price),
-        currency: 'USD',
-        category: brand.category,
-        images,
-        description: description || `${name} from ${brand.name}`,
-        sizes: sizes.length > 0 ? sizes : undefined,
-        inStock: true,
-        whatsappNumber: '+201001234567',
-      }
-      addCustomProduct(newProduct)
-    }
 
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
-    resetForm()
-    setRefresh(r => r + 1)
+      await loadCloudProducts()
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+      resetForm()
+      setRefresh(r => r + 1)
+    } catch (err) {
+      console.error('Failed to save product:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleEdit = (product: Product) => {
@@ -113,13 +121,16 @@ export default function AdminPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleRemove = (id: string) => {
-    removeCustomProduct(id)
-    if (editingId === id) resetForm()
-    setRefresh(r => r + 1)
+  const handleRemove = async (id: string) => {
+    try {
+      await deleteSupabaseProduct(id)
+      await loadCloudProducts()
+      if (editingId === id) resetForm()
+      setRefresh(r => r + 1)
+    } catch (err) {
+      console.error('Failed to delete product:', err)
+    }
   }
-
-  const customProducts = getCustomProducts()
 
   return (
     <div className="min-h-screen bg-bg pt-24 pb-16">
@@ -199,12 +210,12 @@ export default function AdminPage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Price (USD)</label>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Price (EGP)</label>
             <input
               type="number"
               value={price}
               onChange={e => setPrice(e.target.value)}
-              placeholder="e.g. 50"
+              placeholder="e.g. 500"
               className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm placeholder-muted focus:outline-none focus:border-accent/40"
             />
           </div>
@@ -256,7 +267,7 @@ export default function AdminPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleSubmit}
-              disabled={!brand || !name || !price || !imagePreview}
+              disabled={!brand || !name || !price || !imagePreview || loading}
               className={`flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                 saved
                   ? 'bg-accent/20 text-accent border border-accent/30'
@@ -266,36 +277,10 @@ export default function AdminPage() {
               }`}
             >
               {editingId ? <Check size={18} /> : <Plus size={18} />}
-              {saved ? 'Saved!' : editingId ? 'Update Product' : 'Add Product'}
+              {loading ? 'Saving...' : saved ? 'Saved!' : editingId ? 'Update Product' : 'Add Product'}
             </motion.button>
           </div>
         </div>
-
-        {customProducts.length > 0 && (
-          <div className="mb-8">
-            <button
-              onClick={() => setShowExport(!showExport)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent text-sm font-semibold hover:bg-accent/20 transition-all"
-            >
-              <Download size={15} />
-              {showExport ? 'Hide' : 'Export'} {customProducts.length} custom product(s)
-            </button>
-            {showExport && (
-              <div className="mt-3">
-                <pre className="bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-4 text-[11px] text-green-400 overflow-x-auto max-h-64 overflow-y-auto font-mono whitespace-pre-wrap break-all">
-                  {JSON.stringify(customProducts.map(p => ({ name: p.name, price: p.price, description: p.description, sizes: p.sizes, brandSlug: p.brandSlug })), null, 2)}
-                </pre>
-                <button
-                  onClick={() => { navigator.clipboard.writeText(JSON.stringify(customProducts, null, 2)); setSaved(true); setTimeout(() => setSaved(false), 2000) }}
-                  className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-bg text-[11px] font-bold hover:bg-accent-hover transition-all"
-                >
-                  <Copy size={12} />
-                  {saved ? 'Copied!' : 'Copy All Data'}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
 
         <div>
           <div className="flex items-center justify-between mb-6">
@@ -332,14 +317,14 @@ export default function AdminPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       {brandProducts.map(p => {
-                        const isCustom = customIds.has(p.id)
+                        const isCloud = cloudIds.has(p.id)
                         return (
                           <div key={p.id} className="relative bg-card border border-white/[0.06] rounded-xl overflow-hidden group">
                             <div className="aspect-square bg-[#0f0f0f] overflow-hidden">
                               <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                             </div>
-                            {isCustom && (
-                              <span className="absolute top-2 left-2 text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">Custom</span>
+                            {isCloud && (
+                              <span className="absolute top-2 left-2 text-[9px] font-bold text-accent bg-accent/10 border border-accent/20 rounded px-1.5 py-0.5">Cloud</span>
                             )}
                             <div className="p-2.5">
                               <p className="text-white text-xs font-semibold truncate">{p.name}</p>
@@ -348,7 +333,7 @@ export default function AdminPage() {
                                 <p className="text-muted text-[10px] mt-0.5">{p.sizes.join(' · ')}</p>
                               )}
                             </div>
-                            {isCustom && (
+                            {isCloud && (
                               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                   onClick={() => handleEdit(p)}
