@@ -8,9 +8,9 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/[0.06] mt-16 sm:mt-24">
       <div className="container-wide section-padding py-10 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-12 sm:mb-16">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 mb-12 sm:mb-16">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center gap-1 mb-3">
               <span className="text-white font-black text-xl sm:text-2xl tracking-tighter">SOUQ</span>
               <span className="text-accent font-black text-xl sm:text-2xl tracking-tighter">X</span>
@@ -49,7 +49,7 @@ export default function Footer() {
                 { label: 'Trending', to: '/' },
               ].map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[40px]">
+                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[36px] sm:min-h-[40px]">
                     {link.label}
                   </Link>
                 </li>
@@ -68,7 +68,7 @@ export default function Footer() {
                 { label: 'WANTS & NEEDS', to: '/brand/wantsneeds' },
               ].map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[40px]">
+                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[36px] sm:min-h-[40px]">
                     {link.label}
                   </Link>
                 </li>
@@ -87,7 +87,7 @@ export default function Footer() {
                 { label: 'Contact', to: '/' },
               ].map(link => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[40px]">
+                  <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[36px] sm:min-h-[40px]">
                     {link.label}
                   </Link>
                 </li>

@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Zap } from 'lucide-react'
 
 export default function Hero() {
+  const navigate = useNavigate()
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16">
       {/* Background grid */}
@@ -58,7 +60,8 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <motion.a
-            href="#trending"
+            href="/shop"
+            onClick={(e) => { e.preventDefault(); navigate('/shop') }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="btn-primary px-8 py-3.5 text-base"
