@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
 import { saveOrder } from '../lib/orders'
 
-const WHATSAPP_PHONE = '201111273593'
-const CALLMEBOT_API_KEY = '4725541'
+const WHATSAPP_PHONES = [
+  { phone: '201111273593', apiKey: '4725541' },
+  { phone: '201030803000', apiKey: '2831907' },
+]
 
 export default function CheckoutPage() {
   const navigate = useNavigate()
@@ -46,8 +48,10 @@ export default function CheckoutPage() {
       'Shipping to be confirmed.',
     ].filter(Boolean).join('\n')
 
-    const url = `https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(message)}&apikey=${CALLMEBOT_API_KEY}`
-    fetch(url, { mode: 'no-cors' }).catch(() => {})
+    WHATSAPP_PHONES.forEach(({ phone, apiKey }) => {
+      const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(message)}&apikey=${apiKey}`
+      fetch(url, { mode: 'no-cors' }).catch(() => {})
+    })
 
     saveOrder({
       id: Date.now().toString(),
