@@ -131,9 +131,9 @@ const defs: Def[] = [
   { name: 'Nasomatto Black Afgano', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '6472', description: 'Dark hash, oud, and smoky woods. Controversial, powerful, and captivating.' },
 
   // Louis Vuitton
-  { name: 'Louis Vuitton Ombre Nomade', price: 6000, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '49755', description: 'Oud, rose, and labdanum. An extraordinary oriental luxury journey.', new: true },
-  { name: 'Louis Vuitton Imagination', price: 6000, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '67370', description: 'Bergamot, cedarwood, and musk. Bright, clean, and effortlessly luxurious.' },
-  { name: 'Louis Vuitton Symphony', price: 6000, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '68357', description: 'Ginger, grapefruit, and black tea. Vibrant, fresh, and refined.', new: true },
+  { name: 'Louis Vuitton Ombre Nomade', price: 7200, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '49755', description: 'Oud, rose, and labdanum. An extraordinary oriental luxury journey.', new: true },
+  { name: 'Louis Vuitton Imagination', price: 7200, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '67370', description: 'Bergamot, cedarwood, and musk. Bright, clean, and effortlessly luxurious.' },
+  { name: 'Louis Vuitton Symphony', price: 7200, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '68357', description: 'Ginger, grapefruit, and black tea. Vibrant, fresh, and refined.', new: true },
 
   // Viktor & Rolf
   { name: 'Viktor & Rolf Spicebomb Extreme', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '30499', description: 'Tobacco, vanilla, and intense spices. Warm, rich, dominant.', trending: true },
