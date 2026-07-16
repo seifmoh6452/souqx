@@ -1,13 +1,82 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp, Lock } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
 import { getAllProducts, getCloudProducts, loadCloudProducts } from '../data/products'
 import { addSupabaseProduct, updateSupabaseProduct, deleteSupabaseProduct } from '../lib/products-db'
 import type { Product } from '../data/products'
 
+const ADMIN_USER = 'admin'
+const ADMIN_PASS = '1234567890'
+
 export default function AdminPage() {
+  const [authed, setAuthed] = useState(false)
+  const [user, setUser] = useState('')
+  const [pass, setPass] = useState('')
+  const [authError, setAuthError] = useState('')
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      setAuthed(true)
+    } else {
+      setAuthError('Wrong username or password')
+      setPass('')
+    }
+  }
+
+  if (!authed) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-sm"
+        >
+          <div className="bg-card border border-white/[0.06] rounded-2xl p-6 sm:p-8">
+            <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-5">
+              <Lock size={24} className="text-accent" />
+            </div>
+            <h1 className="text-2xl font-black text-white text-center mb-1">Admin Login</h1>
+            <p className="text-muted text-sm text-center mb-6">Enter your credentials to continue</p>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-1.5 block">Username</label>
+                <input
+                  type="text"
+                  value={user}
+                  onChange={e => { setUser(e.target.value); setAuthError('') }}
+                  autoFocus
+                  className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm focus:outline-none focus:border-accent/40"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-1.5 block">Password</label>
+                <input
+                  type="password"
+                  value={pass}
+                  onChange={e => { setPass(e.target.value); setAuthError('') }}
+                  className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm focus:outline-none focus:border-accent/40"
+                />
+              </div>
+              {authError && (
+                <p className="text-red-400 text-xs font-semibold text-center">{authError}</p>
+              )}
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                className="w-full py-3.5 bg-accent hover:bg-accent-hover text-bg font-bold rounded-xl text-sm transition-colors"
+              >
+                Login
+              </motion.button>
+            </form>
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
   const [brandSlug, setBrandSlug] = useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
