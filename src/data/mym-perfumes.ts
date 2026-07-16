@@ -188,14 +188,14 @@ const defs: Def[] = [
   { name: 'Paco Rabanne Fame', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '74962', description: 'Mango, jasmine, and incense. Modern, electric, and unforgettable.', gender: 'her' },
 
   // YSL
-  { name: 'YSL Libre', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '49281', description: 'Lavender, orange blossom, and musk. Free, bold, and elegant.', gender: 'her' },
+  { name: 'YSL Libre', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '56077', description: 'Lavender, orange blossom, and musk. Free, bold, and elegant.', gender: 'her' },
   { name: 'YSL Black Opium', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '25324', description: 'Coffee, vanilla, and white flowers. Addictive, dark, and magnetic.', gender: 'her' },
 
   // Victoria's Secret
   { name: 'Victoria\'s Secret Very Sexy', price: 6800, highCopyPrice: 950, masterBoxPrice: 1050, imgId: '1725', description: 'Orchid, vanilla, and sandalwood. Seductive, warm, and intoxicating.', gender: 'her' },
 
   // Mugler
-  { name: 'Thierry Mugler Alien', price: 4700, highCopyPrice: 900, masterBoxPrice: 1050, imgId: '41373', description: 'Jasmine sambac, cashmeran, and amber. Mysterious, radiant, and powerful.', gender: 'her' },
+  { name: 'Thierry Mugler Alien', price: 4700, highCopyPrice: 900, masterBoxPrice: 1050, imgId: '707', description: 'Jasmine sambac, cashmeran, and amber. Mysterious, radiant, and powerful.', gender: 'her' },
 
   // Elie Saab
   { name: 'Elie Saab Girl of Now', price: 4700, highCopyPrice: 900, masterBoxPrice: 1050, imgId: '45686', description: 'Pistachio, orange blossom, and almond. Warm, nutty, and feminine.', gender: 'her' },
@@ -204,11 +204,11 @@ const defs: Def[] = [
   { name: 'Tom Ford Lost Cherry', price: 6800, highCopyPrice: 950, masterBoxPrice: 1050, imgId: '51411', description: 'Black cherry, tonka, and almond. Rich, dark, and intoxicating.', gender: 'her' },
 
   // Versace
-  { name: 'Versace Crystal Noir', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '1449', description: 'Ginger, gardenia, and amber. Dark, mysterious, and seductive.', gender: 'her' },
+  { name: 'Versace Crystal Noir', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '631', description: 'Ginger, gardenia, and amber. Dark, mysterious, and seductive.', gender: 'her' },
   { name: 'Versace Bright Crystal', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '632', description: 'Pomegranate, peony, and musk. Fresh, sparkling, and elegant.', gender: 'her' },
 
   // Burberry
-  { name: 'Burberry Her', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '71369', description: 'Strawberry, violet, and musk. Modern British femininity.', gender: 'her' },
+  { name: 'Burberry Her', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '51694', description: 'Strawberry, violet, and musk. Modern British femininity.', gender: 'her' },
 
   // Giorgio Armani
   { name: 'Armani Sì Passione', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '48002', description: 'Raspberry, rose, and vanilla. Passionate, bold, and feminine.', gender: 'her' },
