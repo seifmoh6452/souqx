@@ -15,6 +15,18 @@ export default function AdminPage() {
   const [user, setUser] = useState('')
   const [pass, setPass] = useState('')
   const [authError, setAuthError] = useState('')
+  const [brandSlug, setBrandSlug] = useState('')
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
+  const [originalPrice, setOriginalPrice] = useState('')
+  const [description, setDescription] = useState('')
+  const [images, setImages] = useState<string[]>([])
+  const [sizes, setSizes] = useState<string[]>([])
+  const [saved, setSaved] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [filterBrand, setFilterBrand] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [, setRefresh] = useState(0)
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,18 +89,6 @@ export default function AdminPage() {
       </div>
     )
   }
-  const [brandSlug, setBrandSlug] = useState('')
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [originalPrice, setOriginalPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const [images, setImages] = useState<string[]>([])
-  const [sizes, setSizes] = useState<string[]>([])
-  const [saved, setSaved] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [filterBrand, setFilterBrand] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [, setRefresh] = useState(0)
 
   const brand = brands.find(b => b.slug === brandSlug)
   const allProducts = getAllProducts()
