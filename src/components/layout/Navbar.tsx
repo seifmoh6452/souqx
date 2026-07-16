@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Search, Menu, X, ChevronDown } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { brands } from '../../data/brands'
+import { getAllProducts } from '../../data/products'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -12,6 +13,7 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false)
   const { totalItems, openCart } = useCart()
   const location = useLocation()
+  const allProducts = getAllProducts()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -94,7 +96,7 @@ export default function Navbar() {
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white group-hover:text-accent transition-colors">{brand.name}</div>
-                            <div className="text-xs text-muted">{brand.productCount} items</div>
+                            <div className="text-xs text-muted">{allProducts.filter(p => p.brandSlug === brand.slug).length} items</div>
                           </div>
                         </Link>
                       ))}
