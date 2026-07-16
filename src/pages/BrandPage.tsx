@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Package, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Package, ChevronLeft, ChevronRight, Sparkles, Heart } from 'lucide-react'
 import { brands } from '../data/brands'
 import { getProductsByBrand, getAllProducts } from '../data/products'
+import { getMymPerfumesByGender } from '../data/mym-perfumes'
 import type { Product } from '../data/products'
 import ProductCard from '../components/product/ProductCard'
 import ProductModal from '../components/product/ProductModal'
@@ -16,10 +17,13 @@ export default function BrandPage() {
   const location = useLocation()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [page, setPage] = useState(1)
+  const [genderTab, setGenderTab] = useState<'him' | 'her'>('him')
   const openedFromSearch = useRef(false)
 
   const brand = brands.find(b => b.slug === slug)
-  const brandProducts = slug ? getProductsByBrand(slug) : []
+  const isMym = slug === 'mym'
+  const allBrandProducts = slug ? getProductsByBrand(slug) : []
+  const brandProducts = isMym ? getMymPerfumesByGender(genderTab) : allBrandProducts
   const totalPages = Math.ceil(brandProducts.length / PER_PAGE)
   const pagedProducts = brandProducts.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
@@ -105,7 +109,7 @@ export default function BrandPage() {
 
           <div className="flex gap-4 sm:gap-6">
             {[
-              { value: `${brandProducts.length}`, label: 'Products' },
+              { value: `${allBrandProducts.length}`, label: 'Products' },
               { value: '100%', label: 'Egyptian' },
               { value: '⭐ 5.0', label: 'Rating' },
             ].map((stat, i) => (
@@ -122,6 +126,34 @@ export default function BrandPage() {
             ))}
           </div>
         </div>
+
+        {/* Him / Her tabs for MYM */}
+        {isMym && (
+          <div className="flex gap-3 mb-6 sm:mb-8">
+            <button
+              onClick={() => { setGenderTab('him'); setPage(1) }}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold border transition-all min-h-[44px] ${
+                genderTab === 'him'
+                  ? 'bg-accent text-bg border-accent'
+                  : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+              }`}
+            >
+              <Sparkles size={16} />
+              For Him
+            </button>
+            <button
+              onClick={() => { setGenderTab('her'); setPage(1) }}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold border transition-all min-h-[44px] ${
+                genderTab === 'her'
+                  ? 'bg-pink-500 text-white border-pink-500'
+                  : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+              }`}
+            >
+              <Heart size={16} />
+              For Her
+            </button>
+          </div>
+        )}
 
         {/* Product grid */}
         <div className="mb-6 sm:mb-8">

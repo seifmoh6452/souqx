@@ -19,6 +19,7 @@ type Def = {
   imgId?: string
   trending?: boolean
   new?: boolean
+  gender?: 'him' | 'her'
 }
 
 const defs: Def[] = [
@@ -163,6 +164,78 @@ const defs: Def[] = [
 
   // Orto Parisi
   { name: 'Orto Parisi Megamare', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '53471', description: 'Deep sea, mineral, and skin musk. Raw, powerful, unlike anything else.' },
+
+  // === FOR HER ===
+
+  // Jean Paul Gaultier
+  { name: 'JPG Scandal', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '45651', description: 'Honey, gardenia, and orange blossom. Sexy, bold, and unforgettable.', gender: 'her' },
+  { name: 'JPG La Belle', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '55786', description: 'Pear, vetiver, and tonka bean. Sensual, glamorous, and captivating.', gender: 'her' },
+  { name: 'JPG La Belle Le Parfum', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '65175', description: 'The most intense La Belle. Rich, deep, and powerfully seductive.', gender: 'her' },
+
+  // Carolina Herrera
+  { name: 'Carolina Herrera Good Girl', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '39681', description: 'Almond, coffee, jasmine, and tonka. The iconic stiletto bottle.', gender: 'her' },
+  { name: 'Carolina Herrera Very Good Girl', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '65560', description: 'Redcurrant, cherry, and vanilla. Bolder, fruitier, and more playful.', gender: 'her' },
+
+  // Emporio Armani
+  { name: 'Armani In Love With You', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '52801', description: 'Cherry, raspberry, and white musk. Passionate and deeply romantic.', gender: 'her' },
+  { name: 'Armani Because It\'s You', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '45257', description: 'Raspberry, neroli, and vanilla. Fresh, sweet, and irresistibly charming.', gender: 'her' },
+
+  // Valentino
+  { name: 'Valentino Donna Born In Roma', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '55805', description: 'Jasmine, bourbon vanilla, and woody notes. Bold Italian femininity.', gender: 'her' },
+
+  // Paco Rabanne
+  { name: 'Paco Rabanne Lady Million', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '9045', description: 'Neroli, jasmine, and patchouli. Dazzling, golden, and confident.', gender: 'her' },
+  { name: 'Paco Rabanne Fame', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '74962', description: 'Mango, jasmine, and incense. Modern, electric, and unforgettable.', gender: 'her' },
+
+  // YSL
+  { name: 'YSL Libre', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '49281', description: 'Lavender, orange blossom, and musk. Free, bold, and elegant.', gender: 'her' },
+  { name: 'YSL Black Opium', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '25324', description: 'Coffee, vanilla, and white flowers. Addictive, dark, and magnetic.', gender: 'her' },
+
+  // Victoria's Secret
+  { name: 'Victoria\'s Secret Very Sexy', price: 2000, highCopyPrice: 600, masterBoxPrice: 700, imgId: '1725', description: 'Orchid, vanilla, and sandalwood. Seductive, warm, and intoxicating.', gender: 'her' },
+
+  // Mugler
+  { name: 'Thierry Mugler Alien', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '41373', description: 'Jasmine sambac, cashmeran, and amber. Mysterious, radiant, and powerful.', gender: 'her' },
+
+  // Elie Saab
+  { name: 'Elie Saab Girl of Now', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '45686', description: 'Pistachio, orange blossom, and almond. Warm, nutty, and feminine.', gender: 'her' },
+
+  // Tom Ford
+  { name: 'Tom Ford Lost Cherry', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '51411', description: 'Black cherry, tonka, and almond. Rich, dark, and intoxicating.', gender: 'her' },
+
+  // Versace
+  { name: 'Versace Crystal Noir', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '1449', description: 'Ginger, gardenia, and amber. Dark, mysterious, and seductive.', gender: 'her' },
+  { name: 'Versace Bright Crystal', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '632', description: 'Pomegranate, peony, and musk. Fresh, sparkling, and elegant.', gender: 'her' },
+
+  // Burberry
+  { name: 'Burberry Her', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '71369', description: 'Strawberry, violet, and musk. Modern British femininity.', gender: 'her' },
+
+  // Giorgio Armani
+  { name: 'Armani Sì Passione', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '48002', description: 'Raspberry, rose, and vanilla. Passionate, bold, and feminine.', gender: 'her' },
+
+  // Parfums de Marly
+  { name: 'Parfums de Marly Delina', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '43871', description: 'Turkish rose, lychee, and musk. The most coveted feminine niche fragrance.', gender: 'her' },
+
+  // Carolina Herrera
+  { name: 'Dior Joy', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '51285', description: 'Citrus, jasmine, and rose. Radiant, joyful, and effortlessly chic.', gender: 'her' },
+
+  // Kayali
+  { name: 'Kayali Lovefest', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '75661', description: 'Burning sage, praline, and amber. Warm, passionate, and addictive.', gender: 'her' },
+  { name: 'Kayali Yum Pistachio Gelato 33', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '79846', description: 'Pistachio, vanilla, and caramel. Creamy, sweet, and delicious.', gender: 'her' },
+  { name: 'Kayali Yum Boujee Marshmallow 81', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '99254', description: 'Marshmallow, vanilla, and musk. Soft, sweet, and dreamy.', gender: 'her' },
+
+  // Billie Eilish
+  { name: 'Billie Eilish No. 1', price: 2000, highCopyPrice: 600, masterBoxPrice: 700, imgId: '70052', description: 'Vanilla, cocoa, and musk. Warm, cozy, and effortlessly cool.', gender: 'her' },
+  { name: 'Billie Eilish No. 2', price: 2000, highCopyPrice: 600, masterBoxPrice: 700, imgId: '76532', description: 'White peach, lavender, and musk. Fresh, soft, and ethereal.', gender: 'her' },
+
+  // Viktor & Rolf
+  { name: 'Viktor & Rolf Bonbon', price: 3000, highCopyPrice: 800, masterBoxPrice: 1000, imgId: '23317', description: 'Peach, orange, and caramel. Sweet, playful, and elegant.', gender: 'her' },
+
+  // Mancera
+  { name: 'Mancera Coco Vanille', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '42782', description: 'Coconut, vanilla, and tropical flowers. Creamy, exotic, and long-lasting.', gender: 'her' },
+
+  // Lattafa
+  { name: 'Lattafa Yara', price: 900, imgId: '76880', description: 'Tropical fruits, vanilla, and musk. Sweet, playful, and affordable luxury.', gender: 'her' },
 ]
 
 export const mymPerfumes = defs.map((d, i) => ({
@@ -182,4 +255,8 @@ export const mymPerfumes = defs.map((d, i) => ({
   trending: d.trending,
   new: d.new,
   whatsappNumber: wa,
+  gender: d.gender || 'him',
 }))
+
+export const getMymPerfumesByGender = (gender: 'him' | 'her') =>
+  mymPerfumes.filter(p => p.gender === gender)
