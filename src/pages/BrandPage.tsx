@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Package } from 'lucide-react'
+import { ArrowLeft, Package, ChevronLeft, ChevronRight } from 'lucide-react'
 import { brands } from '../data/brands'
 import { getProductsByBrand, getAllProducts } from '../data/products'
 import type { Product } from '../data/products'
@@ -9,17 +9,26 @@ import ProductCard from '../components/product/ProductCard'
 import ProductModal from '../components/product/ProductModal'
 import BrandLogo from '../components/brand/BrandLogo'
 
+const PER_PAGE = 20
+
 export default function BrandPage() {
   const { slug } = useParams<{ slug: string }>()
   const location = useLocation()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [page, setPage] = useState(1)
   const openedFromSearch = useRef(false)
 
   const brand = brands.find(b => b.slug === slug)
   const brandProducts = slug ? getProductsByBrand(slug) : []
+  const totalPages = Math.ceil(brandProducts.length / PER_PAGE)
+  const pagedProducts = brandProducts.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [slug])
+
+  useEffect(() => {
+    setPage(1)
   }, [slug])
 
   useEffect(() => {
@@ -129,15 +138,57 @@ export default function BrandPage() {
               <p className="text-muted text-sm sm:text-lg">No products yet. Check back soon.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {brandProducts.map(product => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onQuickView={setSelectedProduct}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {pagedProducts.map(product => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onQuickView={setSelectedProduct}
+                  />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-8">
+                  <button
+                    onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 400, behavior: 'smooth' }) }}
+                    disabled={page === 1}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
+                      page === 1
+                        ? 'border-white/[0.04] text-white/20 cursor-not-allowed'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                    <button
+                      key={p}
+                      onClick={() => { setPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }) }}
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all ${
+                        p === page
+                          ? 'bg-accent text-bg border-accent'
+                          : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 400, behavior: 'smooth' }) }}
+                    disabled={page === totalPages}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
+                      page === totalPages
+                        ? 'border-white/[0.04] text-white/20 cursor-not-allowed'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
