@@ -23,12 +23,12 @@ type Def = {
 
 const defs: Def[] = [
   // Tom Ford
-  { name: 'Tom Ford Black Orchid', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '1018', description: 'Dark, opulent, iconic. Black truffle, ylang ylang, and black orchid.', trending: true },
-  { name: 'Tom Ford Noir Extreme', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '29675', description: 'Cardamom, rose, amber, and vanilla. Rich, sensual, and addictive.' },
-  { name: 'Tom Ford Bitter Peach', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '62707', description: 'Peach, cognac, vanilla, and musk. Playfully sensual with a dark fruity edge.' },
-  { name: 'Tom Ford Oud Wood', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '1826', description: 'Rare oud, sandalwood, and rosewood. A masterclass in modern oud.', trending: true },
-  { name: 'Tom Ford Tobacco Vanille', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '1825', description: 'Warm tobacco, vanilla, and spices. One of the most beloved Private Blends.', trending: true },
-  { name: 'Tom Ford Tobacco Oud', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '21402', description: 'Tobacco, oud, and dark woods. A bold Private Blend that commands respect.', new: true },
+  { name: 'Tom Ford Black Orchid', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '1018', description: 'Dark, opulent, iconic. Black truffle, ylang ylang, and black orchid.', trending: true },
+  { name: 'Tom Ford Noir Extreme', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '29675', description: 'Cardamom, rose, amber, and vanilla. Rich, sensual, and addictive.' },
+  { name: 'Tom Ford Bitter Peach', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '62707', description: 'Peach, cognac, vanilla, and musk. Playfully sensual with a dark fruity edge.' },
+  { name: 'Tom Ford Oud Wood', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '1826', description: 'Rare oud, sandalwood, and rosewood. A masterclass in modern oud.', trending: true },
+  { name: 'Tom Ford Tobacco Vanille', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '1825', description: 'Warm tobacco, vanilla, and spices. One of the most beloved Private Blends.', trending: true },
+  { name: 'Tom Ford Tobacco Oud', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '21402', description: 'Tobacco, oud, and dark woods. A bold Private Blend that commands respect.', new: true },
 
   // Dior
   { name: 'Dior Fahrenheit', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '228', description: 'Leather, violet, and woods. A cult classic since 1988.' },
@@ -85,10 +85,10 @@ const defs: Def[] = [
   { name: 'Creed Silver Mountain Water', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '472', description: 'Green tea, bergamot, mandarin, and musk. Fresh Alpine air in a bottle.' },
 
   // Parfums de Marly
-  { name: 'Parfums de Marly Pegasus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '16938', description: 'Heliotrope, sandalwood, and vanilla. Elegant, white, and effortlessly refined.' },
-  { name: 'Parfums de Marly Herod', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '16939', description: 'Tobacco, pepper, vanilla, and patchouli. Rich, authoritative, and masculine.' },
-  { name: 'Parfums de Marly Haltane', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '70776', description: 'Lavender, saffron, praline, and oud. A luxurious modern oud composition.', new: true },
-  { name: 'Parfums de Marly Layton', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '39314', description: 'Apple, lavender, vanilla, and sandalwood. The king of compliments.', trending: true },
+  { name: 'Parfums de Marly Pegasus', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16938', description: 'Heliotrope, sandalwood, and vanilla. Elegant, white, and effortlessly refined.' },
+  { name: 'Parfums de Marly Herod', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16939', description: 'Tobacco, pepper, vanilla, and patchouli. Rich, authoritative, and masculine.' },
+  { name: 'Parfums de Marly Haltane', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '70776', description: 'Lavender, saffron, praline, and oud. A luxurious modern oud composition.', new: true },
+  { name: 'Parfums de Marly Layton', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '39314', description: 'Apple, lavender, vanilla, and sandalwood. The king of compliments.', trending: true },
 
   // Nishane
   { name: 'Nishane Hacivat X', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '80462', description: 'The darker, more complex evolution of Hacivat. Deeper woods and richer texture.' },
