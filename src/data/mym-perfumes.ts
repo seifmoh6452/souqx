@@ -23,11 +23,11 @@ type Def = {
 }
 
 const defs: Def[] = [
-  // Featured Men's
-  { name: 'Armani Stronger With You Intensely', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '52802', description: 'Vanilla, chestnut, and amber. Intense, warm, and irresistibly addictive.', trending: true, new: true },
-  { name: 'Versace Eros', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '16657', description: 'Mint, green apple, and tonka. Fresh, bold, and seductive.', trending: true, new: true },
-  { name: 'JPG Le Male Elixir', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '81642', description: 'Lavender, honey, and vanilla. The most intense Le Male ever created.', trending: true, new: true },
-  { name: 'JPG Le Male Le Parfum', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '61856', description: 'Lavender, vanilla, and oriental notes. Elegant, powerful, and refined.', trending: true, new: true },
+  // Featured
+  { name: 'Stronger With You Intensely', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '52802', description: 'Darker, woodier, and even more magnetic than the original.', trending: true, new: true },
+  { name: 'Versace Eros EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '62762', description: 'Mint, apple, and vanilla. Intense, passionate, impossible to ignore.', trending: true, new: true },
+  { name: 'JPG Le Male Elixir', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '81642', description: 'The most intense Le Male. Deep lavender, vanilla, and amber.', trending: true, new: true },
+  { name: 'JPG Le Male Le Parfum', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '61856', description: 'The golden, most powerful Le Male. Lavender, vanilla, and tonka.', trending: true, new: true },
   { name: 'Lattafa Asad', price: 900, imgId: '72821', description: 'Tobacco, oud, and amber. A bold, smoky scent that punches above its price.', trending: true, new: true },
 
   // Tom Ford
@@ -56,13 +56,11 @@ const defs: Def[] = [
 
   // Versace
   { name: 'Versace Eros Flame', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '52180', description: 'Black pepper, rosewood, and vanilla. The fiery, intense side of Eros.' },
-  { name: 'Versace Eros EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '62762', description: 'Mint, apple, and vanilla. Intense, passionate, impossible to ignore.', trending: true },
 
   // Emporio Armani
   { name: 'Stronger With You', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '45258', description: 'Sage, cardamom, chestnut, and vanilla. Warm, vibrant, and effortlessly sexy.', trending: true },
   { name: 'Stronger With You Sandalwood', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '102519', description: 'Green sandalwood, lavender, and tonka. Fresh yet warm, modern and elegant.' },
   { name: 'Stronger With You Tobacco', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '90333', description: 'Tobacco, sage, and vanilla. Sophisticated and bold with a smoky edge.', new: true },
-  { name: 'Stronger With You Intensely', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '52802', description: 'Darker, woodier, and even more magnetic than the original.' },
   { name: 'Stronger With You Absolutely', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '64501', description: 'The Parfum concentration. The deepest, most intense Stronger With You.' },
 
   // Armani
@@ -84,8 +82,6 @@ const defs: Def[] = [
 
   // Jean Paul Gaultier
   { name: 'JPG Le Male', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '430', description: 'Lavender, mint, and vanilla. Magnetic, warm, and absolutely irresistible.', trending: true },
-  { name: 'JPG Le Male Le Parfum', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '61856', description: 'The golden, most powerful Le Male. Lavender, vanilla, and tonka.', new: true },
-  { name: 'JPG Le Male Elixir', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '81642', description: 'The most intense Le Male. Deep lavender, vanilla, and amber.' },
 
   // Creed
   { name: 'Creed Aventus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '9828', description: 'Pineapple, birch, musk, and oakmoss. The most celebrated men\'s fragrance.', trending: true },
