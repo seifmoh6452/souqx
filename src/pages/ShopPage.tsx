@@ -118,13 +118,36 @@ export default function ShopPage() {
                 All Categories
               </button>
 
-              <h2 className="text-display-lg font-black text-white tracking-tight mb-8">
+              <h2 className="text-display-lg font-black text-white tracking-tight mb-6">
                 {categories.find(c => c.id === selected)?.label}
-                {selected === 'perfumes' && (
-                  <span className="text-accent text-base font-semibold ml-3">· {genderTab === 'him' ? 'For Him' : 'For Her'}</span>
-                )}
                 <span className="text-muted text-base font-normal ml-3">({filtered.length})</span>
               </h2>
+
+              {/* Him/Her switcher for Perfumes */}
+              {selected === 'perfumes' && (
+                <div className="flex gap-3 mb-8">
+                  <button
+                    onClick={() => setGenderTab('him')}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold border transition-all min-h-[48px] ${
+                      genderTab === 'him'
+                        ? 'bg-accent text-bg border-accent'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    🔥 For Him
+                  </button>
+                  <button
+                    onClick={() => setGenderTab('her')}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold border transition-all min-h-[48px] ${
+                      genderTab === 'her'
+                        ? 'bg-pink-500 text-white border-pink-500'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    💐 For Her
+                  </button>
+                </div>
+              )}
 
               {filtered.length === 0 ? (
                 <p className="text-muted text-center py-20">No products in this category yet.</p>
