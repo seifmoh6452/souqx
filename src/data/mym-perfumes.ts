@@ -23,6 +23,13 @@ type Def = {
 }
 
 const defs: Def[] = [
+  // Featured Men's
+  { name: 'Armani Stronger With You Intensely', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '52802', description: 'Vanilla, chestnut, and amber. Intense, warm, and irresistibly addictive.', trending: true, new: true },
+  { name: 'Versace Eros', price: 4800, highCopyPrice: 900, masterBoxPrice: 1200, imgId: '16657', description: 'Mint, green apple, and tonka. Fresh, bold, and seductive.', trending: true, new: true },
+  { name: 'JPG Le Male Elixir', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '81642', description: 'Lavender, honey, and vanilla. The most intense Le Male ever created.', trending: true, new: true },
+  { name: 'JPG Le Male Le Parfum', price: 5200, highCopyPrice: 950, masterBoxPrice: 1200, imgId: '61856', description: 'Lavender, vanilla, and oriental notes. Elegant, powerful, and refined.', trending: true, new: true },
+  { name: 'Lattafa Asad', price: 900, imgId: '72821', description: 'Tobacco, oud, and amber. A bold, smoky scent that punches above its price.', trending: true, new: true },
+
   // Tom Ford
   { name: 'Tom Ford Black Orchid', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '1018', description: 'Dark, opulent, iconic. Black truffle, ylang ylang, and black orchid.', trending: true },
   { name: 'Tom Ford Noir Extreme', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '29675', description: 'Cardamom, rose, amber, and vanilla. Rich, sensual, and addictive.' },
