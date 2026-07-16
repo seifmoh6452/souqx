@@ -129,7 +129,9 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                 {/* Tags */}
                 <div className="absolute bottom-3 left-3 flex gap-2">
                   {product.originalPrice && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-500 text-white">SALE</span>
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-500 text-white">
+                      {Math.round((1 - displayPrice / product.originalPrice) * 100)}% OFF
+                    </span>
                   )}
                   {product.trending && (
                     <span className="label-tag">Trending</span>
@@ -206,7 +208,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                 </p>
                 {product.originalPrice && (
                   <span className="text-[11px] font-bold text-red-400 bg-red-500/10 border border-red-500/20 rounded-full px-2 py-0.5">
-                    SALE
+                    {Math.round((1 - displayPrice / product.originalPrice) * 100)}% OFF
                   </span>
                 )}
                 {copyType === 'high-copy' && hasHighCopy && (
