@@ -128,6 +128,9 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
 
                 {/* Tags */}
                 <div className="absolute bottom-3 left-3 flex gap-2">
+                  {product.originalPrice && (
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-500 text-white">SALE</span>
+                  )}
                   {product.trending && (
                     <span className="label-tag">Trending</span>
                   )}
@@ -193,9 +196,19 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
 
               {/* Price */}
               <div className="flex items-center gap-2 mb-4">
+                {product.originalPrice && (
+                  <span className="text-muted text-base sm:text-lg line-through font-medium">
+                    {product.originalPrice.toLocaleString()} EGP
+                  </span>
+                )}
                 <p className="text-2xl sm:text-3xl font-black text-white">
                   {displayPrice.toLocaleString()} <span className="text-sm sm:text-lg text-muted font-semibold">EGP</span>
                 </p>
+                {product.originalPrice && (
+                  <span className="text-[11px] font-bold text-red-400 bg-red-500/10 border border-red-500/20 rounded-full px-2 py-0.5">
+                    SALE
+                  </span>
+                )}
                 {copyType === 'high-copy' && hasHighCopy && (
                   <span className="text-[11px] font-semibold text-accent bg-accent/10 border border-accent/20 rounded-full px-2 py-0.5">
                     High Copy

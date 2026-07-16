@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [brandSlug, setBrandSlug] = useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
+  const [originalPrice, setOriginalPrice] = useState('')
   const [description, setDescription] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [sizes, setSizes] = useState<string[]>([])
@@ -56,6 +57,7 @@ export default function AdminPage() {
     setBrandSlug('')
     setName('')
     setPrice('')
+    setOriginalPrice('')
     setDescription('')
     setImages([])
     setSizes([])
@@ -77,6 +79,7 @@ export default function AdminPage() {
             brandSlug: brand.slug,
             name,
             price: Number(price),
+            originalPrice: originalPrice ? Number(originalPrice) : undefined,
             description: description || `${name} from ${brand.name}`,
             images,
             sizes: sizes.length > 0 ? sizes : undefined,
@@ -90,6 +93,7 @@ export default function AdminPage() {
           brandSlug: brand.slug,
           name,
           price: Number(price),
+          originalPrice: originalPrice ? Number(originalPrice) : undefined,
           currency: 'EGP',
           category: brand.category,
           images,
@@ -118,6 +122,7 @@ export default function AdminPage() {
     setBrandSlug(product.brandSlug)
     setName(product.name)
     setPrice(String(product.price))
+    setOriginalPrice(product.originalPrice ? String(product.originalPrice) : '')
     setDescription(product.description)
     setImages([...product.images])
     setSizes(product.sizes || [])
@@ -249,6 +254,17 @@ export default function AdminPage() {
           </div>
 
           <div>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Original Price — Instead of (EGP, optional)</label>
+            <input
+              type="number"
+              value={originalPrice}
+              onChange={e => setOriginalPrice(e.target.value)}
+              placeholder="e.g. 700 (strikethrough shown)"
+              className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm placeholder-muted focus:outline-none focus:border-accent/40"
+            />
+          </div>
+
+          <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Description (optional)</label>
             <textarea
               value={description}
@@ -356,7 +372,12 @@ export default function AdminPage() {
                             )}
                             <div className="p-2.5">
                               <p className="text-white text-xs font-semibold truncate">{p.name}</p>
-                              <p className="text-accent text-xs font-bold">{p.price.toLocaleString()} EGP</p>
+                              <div className="flex items-center gap-2">
+                                <p className="text-accent text-xs font-bold">{p.price.toLocaleString()} EGP</p>
+                                {p.originalPrice && (
+                                  <p className="text-muted text-[10px] line-through">{p.originalPrice.toLocaleString()} EGP</p>
+                                )}
+                              </div>
                               {p.sizes && (
                                 <p className="text-muted text-[10px] mt-0.5">{p.sizes.join(' · ')}</p>
                               )}

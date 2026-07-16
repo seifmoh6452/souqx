@@ -97,6 +97,9 @@ export default function ProductCard({ product, onQuickView }: Props) {
 
         {/* Tags */}
         <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {product.originalPrice && (
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white">SALE</span>
+          )}
           {product.trending && (
             <span className="label-tag text-[10px]">Trending</span>
           )}
@@ -117,6 +120,11 @@ export default function ProductCard({ product, onQuickView }: Props) {
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
+          {product.originalPrice && (
+            <span className="text-muted text-xs line-through font-medium">
+              {product.originalPrice.toLocaleString()}
+            </span>
+          )}
           <span className="text-white font-black text-sm sm:text-base">
             {displayPrice.toLocaleString()} <span className="text-[11px] text-muted font-medium">EGP</span>
           </span>

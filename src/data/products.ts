@@ -20,6 +20,7 @@ export interface Product {
   whatsappNumber: string
   highCopyPrice?: number
   masterBoxPrice?: number
+  originalPrice?: number
 }
 
 const modestaProducts: Product[] = [
