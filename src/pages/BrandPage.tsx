@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package } from 'lucide-react'
@@ -13,6 +13,7 @@ export default function BrandPage() {
   const { slug } = useParams<{ slug: string }>()
   const location = useLocation()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const openedFromSearch = useRef(false)
 
   const brand = brands.find(b => b.slug === slug)
   const brandProducts = slug ? getProductsByBrand(slug) : []
@@ -22,10 +23,14 @@ export default function BrandPage() {
   }, [slug])
 
   useEffect(() => {
+    if (openedFromSearch.current) return
     const openId = (location.state as { openProduct?: string } | null)?.openProduct
     if (openId && brandProducts.length > 0) {
       const match = brandProducts.find(p => p.id === openId)
-      if (match) setSelectedProduct(match)
+      if (match) {
+        setSelectedProduct(match)
+        openedFromSearch.current = true
+      }
     }
   }, [location.state, brandProducts])
 
