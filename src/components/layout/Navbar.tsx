@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Search, Menu, X, ChevronDown } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
@@ -11,9 +11,23 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [brandsOpen, setBrandsOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { totalItems, openCart } = useCart()
   const location = useLocation()
+  const navigate = useNavigate()
   const allProducts = getAllProducts()
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return { brands: [], products: [] }
+    const q = searchQuery.toLowerCase()
+    const matchedBrands = brands.filter(b => b.name.toLowerCase().includes(q) || b.category.toLowerCase().includes(q))
+    const matchedProducts = allProducts.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.brandName.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q)
+    ).slice(0, 8)
+    return { brands: matchedBrands, products: matchedProducts }
+  }, [searchQuery, allProducts])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -25,6 +39,7 @@ export default function Navbar() {
     setMobileOpen(false)
     setBrandsOpen(false)
     setSearchOpen(false)
+    setSearchQuery('')
   }, [location])
 
   useEffect(() => {
@@ -194,7 +209,7 @@ export default function Navbar() {
         {searchOpen && (
           <motion.div
             className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4"
-            onClick={() => setSearchOpen(false)}
+            onClick={() => { setSearchOpen(false); setSearchQuery('') }}
           >
             <motion.div
               initial={{ y: -20, opacity: 0 }}
@@ -209,16 +224,71 @@ export default function Navbar() {
                 <input
                   autoFocus
                   type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
                   placeholder="Search brands, products..."
                   className="w-full pl-12 pr-14 py-4 bg-card border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:border-accent/40 text-base sm:text-lg"
                 />
                 <button
-                  onClick={() => setSearchOpen(false)}
+                  onClick={() => { setSearchOpen(false); setSearchQuery('') }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl text-muted hover:text-white transition-colors"
                 >
                   <X size={20} />
                 </button>
               </div>
+
+              {searchQuery.trim() && (
+                <div className="mt-2 bg-card border border-white/[0.08] rounded-2xl overflow-hidden max-h-[60vh] overflow-y-auto">
+                  {searchResults.brands.length === 0 && searchResults.products.length === 0 && (
+                    <div className="p-8 text-center text-muted text-sm">No results found for "{searchQuery}"</div>
+                  )}
+
+                  {searchResults.brands.length > 0 && (
+                    <div className="p-2">
+                      <p className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 py-2">Brands</p>
+                      {searchResults.brands.map(brand => (
+                        <Link
+                          key={brand.id}
+                          to={`/brand/${brand.slug}`}
+                          onClick={() => { setSearchOpen(false); setSearchQuery('') }}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
+                        >
+                          <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
+                            <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-white">{brand.name}</div>
+                            <div className="text-xs text-muted">{brand.category}</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                  {searchResults.products.length > 0 && (
+                    <div className="p-2 border-t border-white/[0.06]">
+                      <p className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 py-2">Products</p>
+                      {searchResults.products.map(product => (
+                        <Link
+                          key={product.id}
+                          to={`/brand/${product.brandSlug}`}
+                          onClick={() => { setSearchOpen(false); setSearchQuery('') }}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
+                        >
+                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
+                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-white truncate">{product.name}</div>
+                            <div className="text-xs text-muted">{product.brandName}</div>
+                          </div>
+                          <div className="text-sm font-bold text-accent">{product.price.toLocaleString()} EGP</div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
