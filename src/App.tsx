@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CartProvider } from './context/CartContext'
@@ -41,9 +41,19 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  const [ready, setReady] = useState(false)
+
   useEffect(() => {
-    loadCloudProducts()
+    loadCloudProducts().then(() => setReady(true))
   }, [])
+
+  if (!ready) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <CartProvider>
