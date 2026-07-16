@@ -93,7 +93,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                   </motion.button>
                 </div>
 
-                <div className="aspect-square sm:aspect-square max-h-[50vh] sm:max-h-none overflow-hidden">
+                <div className={`aspect-square sm:aspect-square max-h-[50vh] sm:max-h-none overflow-hidden ${product.brandSlug === 'mym' ? 'bg-[#0f0f0f]' : ''}`}>
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={imageIndex}
@@ -103,7 +103,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                       transition={{ duration: 0.4 }}
                       src={product.images[imageIndex]}
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full ${product.brandSlug === 'mym' ? 'object-contain p-4' : 'object-cover'}`}
                     />
                   </AnimatePresence>
                 </div>
