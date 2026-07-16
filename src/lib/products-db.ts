@@ -32,6 +32,7 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     whatsappNumber: (row.whatsapp_number as string) || '+201001234567',
     highCopyPrice: row.high_copy_price as number | undefined,
     masterBoxPrice: row.master_box_price as number | undefined,
+    originalPrice: row.original_price as number | undefined,
   }))
 }
 
@@ -58,6 +59,7 @@ export async function addSupabaseProduct(product: Product): Promise<void> {
       whatsapp_number: product.whatsappNumber,
       high_copy_price: product.highCopyPrice || null,
       master_box_price: product.masterBoxPrice || null,
+      original_price: product.originalPrice || null,
     }),
   })
   if (!res.ok) {
@@ -88,6 +90,7 @@ export async function updateSupabaseProduct(product: Product): Promise<void> {
       whatsapp_number: product.whatsappNumber,
       high_copy_price: product.highCopyPrice || null,
       master_box_price: product.masterBoxPrice || null,
+      original_price: product.originalPrice || null,
     }),
   })
   if (!res.ok) {
