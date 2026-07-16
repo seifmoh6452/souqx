@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Sparkles, Shirt, Watch, Glasses } from 'lucide-react'
 import { getAllProducts } from '../data/products'
+import { getMymPerfumesByGender } from '../data/mym-perfumes'
 import type { Product } from '../data/products'
 import ProductCard from '../components/product/ProductCard'
 import ProductModal from '../components/product/ProductModal'
@@ -29,9 +30,14 @@ function matchCategory(product: Product, cat: Category): boolean {
 export default function ShopPage() {
   const [selected, setSelected] = useState<Category | null>(null)
   const [quickView, setQuickView] = useState<Product | null>(null)
+  const [genderTab, setGenderTab] = useState<'him' | 'her'>('him')
   const allProducts = getAllProducts()
 
-  const filtered = selected ? allProducts.filter(p => matchCategory(p, selected)) : []
+  const filtered = selected
+    ? selected === 'perfumes'
+      ? getMymPerfumesByGender(genderTab)
+      : allProducts.filter(p => matchCategory(p, selected))
+    : []
 
   return (
     <div className="min-h-screen pt-20 pb-16">
@@ -94,6 +100,32 @@ export default function ShopPage() {
                 <ArrowLeft size={16} />
                 All Categories
               </button>
+
+              {/* Him/Her tabs for Perfumes */}
+              {selected === 'perfumes' && (
+                <div className="flex gap-3 mb-6">
+                  <button
+                    onClick={() => setGenderTab('him')}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold border transition-all min-h-[44px] ${
+                      genderTab === 'him'
+                        ? 'bg-accent text-bg border-accent'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    For Him
+                  </button>
+                  <button
+                    onClick={() => setGenderTab('her')}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold border transition-all min-h-[44px] ${
+                      genderTab === 'her'
+                        ? 'bg-pink-500 text-white border-pink-500'
+                        : 'border-white/[0.08] text-white hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    For Her
+                  </button>
+                </div>
+              )}
 
               <h2 className="text-display-lg font-black text-white tracking-tight mb-8">
                 {categories.find(c => c.id === selected)?.label}
