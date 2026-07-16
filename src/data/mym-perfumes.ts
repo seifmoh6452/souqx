@@ -66,7 +66,7 @@ const defs: Def[] = [
 
   // Carolina Herrera
   { name: '212 VIP Black', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '46093', description: 'Bourbon, cacao, and leather. The ultimate VIP night-out fragrance.', trending: true },
-  { name: '212 Men', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '1080', description: 'Metallic woods, juniper, and green tea. The cool, urban scent of NYC.' },
+  { name: '212 Men', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '297', description: 'Metallic woods, juniper, and green tea. The cool, urban scent of NYC.' },
   { name: 'Carolina Herrera Burning Rose', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '31053', description: 'Rich rose, saffron, and oud. A bold, dramatic floral statement.', new: true },
   { name: 'Carolina Herrera Sandal Ruby', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '54971', description: 'Sandalwood, rose, and ruby-red accords. Warm, sensual, and luxurious.' },
 
@@ -80,8 +80,8 @@ const defs: Def[] = [
   { name: 'JPG Le Male Elixir', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '81642', description: 'The most intense Le Male. Deep lavender, vanilla, and amber.' },
 
   // Creed
-  { name: 'Creed Aventus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '10337', description: 'Pineapple, birch, musk, and oakmoss. The most celebrated men\'s fragrance.', trending: true },
-  { name: 'Creed Absolu Aventus', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '99378', description: 'A darker, deeper Aventus. More intense, more luxurious, more powerful.', new: true },
+  { name: 'Creed Aventus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '9828', description: 'Pineapple, birch, musk, and oakmoss. The most celebrated men\'s fragrance.', trending: true },
+  { name: 'Creed Absolu Aventus', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '84112', description: 'A darker, deeper Aventus. More intense, more luxurious, more powerful.', new: true },
   { name: 'Creed Silver Mountain Water', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '472', description: 'Green tea, bergamot, mandarin, and musk. Fresh Alpine air in a bottle.' },
 
   // Parfums de Marly
