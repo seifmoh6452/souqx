@@ -119,7 +119,7 @@ export default function ShopPage() {
         </AnimatePresence>
       </div>
 
-      <ProductModal product={quickView} onClose={() => setQuickView(null)} />
+      <ProductModal product={quickView} onClose={() => setQuickView(null)} onSelectProduct={setQuickView} />
     </div>
   )
 }

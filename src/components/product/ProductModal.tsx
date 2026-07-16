@@ -8,9 +8,10 @@ import { getAllProducts } from '../../data/products'
 interface Props {
   product: Product | null
   onClose: () => void
+  onSelectProduct?: (product: Product) => void
 }
 
-export default function ProductModal({ product, onClose }: Props) {
+export default function ProductModal({ product, onClose, onSelectProduct }: Props) {
   const [imageIndex, setImageIndex] = useState(0)
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
@@ -345,6 +346,7 @@ export default function ProductModal({ product, onClose }: Props) {
                   <motion.button
                     key={related.id}
                     whileTap={{ scale: 0.97 }}
+                    onClick={() => onSelectProduct?.(related)}
                     className="group text-left"
                   >
                     <div className="aspect-square rounded-xl overflow-hidden bg-black mb-2">

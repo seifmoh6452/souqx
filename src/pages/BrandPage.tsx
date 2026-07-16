@@ -128,7 +128,7 @@ export default function BrandPage() {
         </div>
       </div>
 
-      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onSelectProduct={setSelectedProduct} />
     </div>
   )
 }
