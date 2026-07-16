@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package } from 'lucide-react'
 import { brands } from '../data/brands'
-import { getProductsByBrand } from '../data/products'
+import { getProductsByBrand, getAllProducts } from '../data/products'
 import type { Product } from '../data/products'
 import ProductCard from '../components/product/ProductCard'
 import ProductModal from '../components/product/ProductModal'
@@ -82,7 +82,7 @@ export default function BrandPage() {
 
           <div className="flex gap-4 sm:gap-6">
             {[
-              { value: `${brand.productCount}`, label: 'Products' },
+              { value: `${brandProducts.length}`, label: 'Products' },
               { value: '100%', label: 'Egyptian' },
               { value: '⭐ 5.0', label: 'Rating' },
             ].map((stat, i) => (

@@ -2,9 +2,12 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../../data/brands'
+import { getAllProducts } from '../../data/products'
 import BrandLogo from '../brand/BrandLogo'
 
 export default function FeaturedBrands() {
+  const allProducts = getAllProducts()
+
   return (
     <section id="brands" className="py-16 sm:py-24 section-padding">
       <div className="container-wide">
@@ -66,7 +69,7 @@ export default function FeaturedBrands() {
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold" style={{ color: brand.accentColor }}>{brand.category}</span>
                       <span className="w-1 h-1 rounded-full bg-white/20" />
-                      <span className="text-xs text-muted">{brand.productCount} products</span>
+                      <span className="text-xs text-muted">{allProducts.filter(p => p.brandSlug === brand.slug).length} products</span>
                     </div>
                     <div
                       className="w-7 h-7 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
