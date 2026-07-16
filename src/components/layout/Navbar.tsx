@@ -269,11 +269,10 @@ export default function Navbar() {
                     <div className="p-2 border-t border-white/[0.06]">
                       <p className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 py-2">Products</p>
                       {searchResults.products.map(product => (
-                        <Link
+                        <button
                           key={product.id}
-                          to={`/brand/${product.brandSlug}`}
-                          onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
+                          onClick={() => { setSearchOpen(false); setSearchQuery(''); navigate(`/brand/${product.brandSlug}`, { state: { openProduct: product.id } }) }}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors w-full text-left"
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
                             <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
@@ -283,7 +282,7 @@ export default function Navbar() {
                             <div className="text-xs text-muted">{product.brandName}</div>
                           </div>
                           <div className="text-sm font-bold text-accent">{product.price.toLocaleString()} EGP</div>
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   )}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package } from 'lucide-react'
 import { brands } from '../data/brands'
@@ -11,6 +11,7 @@ import BrandLogo from '../components/brand/BrandLogo'
 
 export default function BrandPage() {
   const { slug } = useParams<{ slug: string }>()
+  const location = useLocation()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const brand = brands.find(b => b.slug === slug)
@@ -19,6 +20,14 @@ export default function BrandPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [slug])
+
+  useEffect(() => {
+    const openId = (location.state as { openProduct?: string } | null)?.openProduct
+    if (openId && brandProducts.length > 0) {
+      const match = brandProducts.find(p => p.id === openId)
+      if (match) setSelectedProduct(match)
+    }
+  }, [location.state, brandProducts])
 
   if (!brand) {
     return (
