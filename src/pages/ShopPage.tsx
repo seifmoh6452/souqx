@@ -21,8 +21,8 @@ function matchCategory(product: Product, cat: Category): boolean {
   if (cat === 'perfumes') return c === 'perfumes' || product.brandSlug === 'mym'
   if (cat === 'clothes') return c === 't-shirts' || c === 'hoodies' || c === 'sets' || c === 'pants' || c === 'fashion' || product.brandSlug === 'modesta'
   if (cat === 'glasses') return product.brandSlug === 'glasswear' || c === 'eyewear' && product.brandSlug === 'glasswear'
-  if (cat === 'watches') return product.brandSlug === 'watch-eye' || c === 'watches'
-  if (cat === 'accessories') return product.brandSlug === 'wants-needs'
+  if (cat === 'watches') return product.brandSlug === 'watcheye' || c === 'watches'
+  if (cat === 'accessories') return product.brandSlug === 'wantsneeds'
   return false
 }
 
