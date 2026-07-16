@@ -24,10 +24,10 @@ type Def = {
 
 const defs: Def[] = [
   // Featured
-  { name: 'Stronger With You Intensely', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '52802', description: 'Darker, woodier, and even more magnetic than the original.', trending: true, new: true },
-  { name: 'Versace Eros EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '62762', description: 'Mint, apple, and vanilla. Intense, passionate, impossible to ignore.', trending: true, new: true },
-  { name: 'JPG Le Male Elixir', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '81642', description: 'The most intense Le Male. Deep lavender, vanilla, and amber.', trending: true, new: true },
-  { name: 'JPG Le Male Le Parfum', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '61856', description: 'The golden, most powerful Le Male. Lavender, vanilla, and tonka.', trending: true, new: true },
+  { name: 'Stronger With You Intensely', price: 4200, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '52802', description: 'Darker, woodier, and even more magnetic than the original.', trending: true, new: true },
+  { name: 'Versace Eros EDP', price: 6600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '62762', description: 'Mint, apple, and vanilla. Intense, passionate, impossible to ignore.', trending: true, new: true },
+  { name: 'JPG Le Male Elixir', price: 6500, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '81642', description: 'The most intense Le Male. Deep lavender, vanilla, and amber.', trending: true, new: true },
+  { name: 'JPG Le Male Le Parfum', price: 6500, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '61856', description: 'The golden, most powerful Le Male. Lavender, vanilla, and tonka.', trending: true, new: true },
   { name: 'Lattafa Asad', price: 900, imgId: '72821', description: 'Tobacco, oud, and amber. A bold, smoky scent that punches above its price.', trending: true, new: true },
 
   // Tom Ford
@@ -39,29 +39,29 @@ const defs: Def[] = [
   { name: 'Tom Ford Tobacco Oud', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '21402', description: 'Tobacco, oud, and dark woods. A bold Private Blend that commands respect.', new: true },
 
   // Dior
-  { name: 'Dior Fahrenheit', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '228', description: 'Leather, violet, and woods. A cult classic since 1988.' },
-  { name: 'Dior Homme Intense', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '13016', description: 'Deep iris, lavender, and leather. Sophisticated and dangerously attractive.', trending: true },
+  { name: 'Dior Fahrenheit', price: 6200, highCopyPrice: 760, masterBoxPrice: 850, imgId: '228', description: 'Leather, violet, and woods. A cult classic since 1988.' },
+  { name: 'Dior Homme Intense', price: 6200, highCopyPrice: 730, masterBoxPrice: 800, imgId: '13016', description: 'Deep iris, lavender, and leather. Sophisticated and dangerously attractive.', trending: true },
   { name: 'Gris Dior', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '48387', description: 'Elegant, powdery, and feminine. A timeless Maison Dior signature.' },
   { name: 'Dior Oud Ispahan', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '48384', description: 'Rose, oud, and sandalwood. A luxurious Maison Dior oriental masterpiece.', new: true },
   { name: 'Dior Tobacolor', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '65551', description: 'Warm tobacco, amber, and wood. A rich, intoxicating creation.', new: true },
-  { name: 'Dior Sauvage EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '48100', description: 'Fresh bergamot, Ambroxan, and pepper. Bold, magnetic, unforgettable.', trending: true },
+  { name: 'Dior Sauvage EDP', price: 6700, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '48100', description: 'Fresh bergamot, Ambroxan, and pepper. Bold, magnetic, unforgettable.', trending: true },
   { name: "Dior Bois d'Argent", price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '1377', description: 'Iris, patchouli, and oud. A silvery wood that is quietly magnificent.' },
 
   // Chanel
   { name: 'Bleu de Chanel EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '25967', description: 'Sandalwood, amber, and cedar. Clean, sophisticated, and masculine.', trending: true },
 
   // YSL
-  { name: 'YSL Y Eau de Parfum', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '50757', description: 'Ginger, sage, juniper, and amberwood. Bold, modern, and confident.', trending: true },
+  { name: 'YSL Y Eau de Parfum', price: 6800, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '50757', description: 'Ginger, sage, juniper, and amberwood. Bold, modern, and confident.', trending: true },
   { name: 'YSL Tuxedo', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '32269', description: 'Smoky, leathery, and bold. Part of the exceptional La Collection.' },
 
   // Versace
-  { name: 'Versace Eros Flame', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '52180', description: 'Black pepper, rosewood, and vanilla. The fiery, intense side of Eros.' },
+  { name: 'Versace Eros Flame', price: 6600, highCopyPrice: 760, masterBoxPrice: 850, imgId: '52180', description: 'Black pepper, rosewood, and vanilla. The fiery, intense side of Eros.' },
 
   // Emporio Armani
   { name: 'Stronger With You', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '45258', description: 'Sage, cardamom, chestnut, and vanilla. Warm, vibrant, and effortlessly sexy.', trending: true },
-  { name: 'Stronger With You Sandalwood', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '102519', description: 'Green sandalwood, lavender, and tonka. Fresh yet warm, modern and elegant.' },
-  { name: 'Stronger With You Tobacco', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '90333', description: 'Tobacco, sage, and vanilla. Sophisticated and bold with a smoky edge.', new: true },
-  { name: 'Stronger With You Absolutely', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '64501', description: 'The Parfum concentration. The deepest, most intense Stronger With You.' },
+  { name: 'Stronger With You Sandalwood', price: 4200, highCopyPrice: 760, masterBoxPrice: 850, imgId: '102519', description: 'Green sandalwood, lavender, and tonka. Fresh yet warm, modern and elegant.' },
+  { name: 'Stronger With You Tobacco', price: 4200, highCopyPrice: 760, masterBoxPrice: 850, imgId: '90333', description: 'Tobacco, sage, and vanilla. Sophisticated and bold with a smoky edge.', new: true },
+  { name: 'Stronger With You Absolutely', price: 4200, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '64501', description: 'The Parfum concentration. The deepest, most intense Stronger With You.' },
 
   // Armani
   { name: 'Armani Code Parfum', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '75126', description: 'Apple, ambergris, tonka bean. The darkest, most seductive Code to date.' },
@@ -78,21 +78,21 @@ const defs: Def[] = [
 
   // Paco Rabanne
   { name: 'Paco Rabanne Invictus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '18471', description: 'Grapefruit, marine, and guaiac wood. Fresh, sporty, victorious.', trending: true },
-  { name: 'Paco Rabanne Invictus Victory EDP', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '65177', description: 'Deeper Invictus with tonka and vetiver. The ultimate trophy.' },
+  { name: 'Paco Rabanne Invictus Victory EDP', price: 6200, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '65177', description: 'Deeper Invictus with tonka and vetiver. The ultimate trophy.' },
 
   // Jean Paul Gaultier
-  { name: 'JPG Le Male', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '430', description: 'Lavender, mint, and vanilla. Magnetic, warm, and absolutely irresistible.', trending: true },
+  { name: 'JPG Le Male', price: 6400, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '430', description: 'Lavender, mint, and vanilla. Magnetic, warm, and absolutely irresistible.', trending: true },
 
   // Creed
-  { name: 'Creed Aventus', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '9828', description: 'Pineapple, birch, musk, and oakmoss. The most celebrated men\'s fragrance.', trending: true },
+  { name: 'Creed Aventus', price: 5600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '9828', description: 'Pineapple, birch, musk, and oakmoss. The most celebrated men\'s fragrance.', trending: true },
   { name: 'Creed Absolu Aventus', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '84112', description: 'A darker, deeper Aventus. More intense, more luxurious, more powerful.', new: true },
   { name: 'Creed Silver Mountain Water', price: 2500, highCopyPrice: 730, masterBoxPrice: 800, imgId: '472', description: 'Green tea, bergamot, mandarin, and musk. Fresh Alpine air in a bottle.' },
 
   // Parfums de Marly
-  { name: 'Parfums de Marly Pegasus', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16938', description: 'Heliotrope, sandalwood, and vanilla. Elegant, white, and effortlessly refined.' },
-  { name: 'Parfums de Marly Herod', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16939', description: 'Tobacco, pepper, vanilla, and patchouli. Rich, authoritative, and masculine.' },
-  { name: 'Parfums de Marly Haltane', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '70776', description: 'Lavender, saffron, praline, and oud. A luxurious modern oud composition.', new: true },
-  { name: 'Parfums de Marly Layton', price: 6200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '39314', description: 'Apple, lavender, vanilla, and sandalwood. The king of compliments.', trending: true },
+  { name: 'Parfums de Marly Pegasus', price: 7200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16938', description: 'Heliotrope, sandalwood, and vanilla. Elegant, white, and effortlessly refined.' },
+  { name: 'Parfums de Marly Herod', price: 7200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '16939', description: 'Tobacco, pepper, vanilla, and patchouli. Rich, authoritative, and masculine.' },
+  { name: 'Parfums de Marly Haltane', price: 7200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '70776', description: 'Lavender, saffron, praline, and oud. A luxurious modern oud composition.', new: true },
+  { name: 'Parfums de Marly Layton', price: 7200, highCopyPrice: 1200, masterBoxPrice: 1400, imgId: '39314', description: 'Apple, lavender, vanilla, and sandalwood. The king of compliments.', trending: true },
 
   // Nishane
   { name: 'Nishane Hacivat X', price: 2800, highCopyPrice: 760, masterBoxPrice: 850, imgId: '80462', description: 'The darker, more complex evolution of Hacivat. Deeper woods and richer texture.' },
@@ -112,10 +112,10 @@ const defs: Def[] = [
   { name: 'Lattafa Oud of Dreams', price: 900, imgId: '77086', description: 'Dreamy oud, vanilla, and amber. Smooth, warm, and long-lasting.' },
 
   // Rasasi
-  { name: 'Rasasi Hawas For Him', price: 1900, imgId: '46890', description: 'Black pepper, marine, and sandalwood. Fresh, sophisticated, all-day wear.', trending: true },
-  { name: 'Rasasi Hawas Ice', price: 1900, imgId: '89050', description: 'Aquatic and cool with crisp citrus and mint. The icy-fresh Hawas.' },
-  { name: 'Rasasi Hawas Black', price: 2100, imgId: '96817', description: 'Dark, intense, and smoky. Rich woods and leather.', new: true },
-  { name: 'Rasasi Hawas Fire', price: 2100, imgId: '101665', description: 'Warm, spicy, and intense. Chilli, amber, and oud. A fiery red edition.' },
+  { name: 'Rasasi Hawas For Him', price: 3200, imgId: '46890', description: 'Black pepper, marine, and sandalwood. Fresh, sophisticated, all-day wear.', trending: true },
+  { name: 'Rasasi Hawas Ice', price: 3200, imgId: '89050', description: 'Aquatic and cool with crisp citrus and mint. The icy-fresh Hawas.' },
+  { name: 'Rasasi Hawas Black', price: 3200, imgId: '96817', description: 'Dark, intense, and smoky. Rich woods and leather.', new: true },
+  { name: 'Rasasi Hawas Fire', price: 3200, imgId: '101665', description: 'Warm, spicy, and intense. Chilli, amber, and oud. A fiery red edition.' },
 
   // Ibraheem Al Qurashi
   { name: 'Ibraheem Dominican Tobacco', price: 1200, imgId: '85718', description: 'Rich tobacco, spices, and warm woods. Exotic tobacco with impressive longevity.' },
@@ -140,10 +140,10 @@ const defs: Def[] = [
   { name: 'Louis Vuitton Symphony', price: 7200, highCopyPrice: 1000, masterBoxPrice: 1200, imgId: '68357', description: 'Ginger, grapefruit, and black tea. Vibrant, fresh, and refined.', new: true },
 
   // Viktor & Rolf
-  { name: 'Viktor & Rolf Spicebomb Extreme', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '30499', description: 'Tobacco, vanilla, and intense spices. Warm, rich, dominant.', trending: true },
+  { name: 'Viktor & Rolf Spicebomb Extreme', price: 3200, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '30499', description: 'Tobacco, vanilla, and intense spices. Warm, rich, dominant.', trending: true },
 
   // Valentino
-  { name: 'Valentino Uomo Born In Roma', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '55963', description: 'Dark, magnetic leather and vanilla. Italian boldness in a pyramid bottle.' },
+  { name: 'Valentino Uomo Born In Roma', price: 5800, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '55963', description: 'Dark, magnetic leather and vanilla. Italian boldness in a pyramid bottle.' },
 
   // Bvlgari
   { name: 'Bvlgari Man In Black', price: 3600, highCopyPrice: 850, masterBoxPrice: 1000, imgId: '26358', description: 'Tuberose, rum, leather, and tobacco. Dark, powerful, and sophisticated.' },
