@@ -116,6 +116,15 @@ export const products: Product[] = [
 ]
 
 let cloudProducts: Product[] = []
+let cachedAll: Product[] = [...products]
+let cacheByBrand: Record<string, Product[]> = {}
+let cachedTrending: Product[] = products.filter(p => p.trending)
+
+function rebuildCache() {
+  cachedAll = [...products, ...cloudProducts]
+  cacheByBrand = {}
+  cachedTrending = cachedAll.filter(p => p.trending)
+}
 
 export async function loadCloudProducts(): Promise<Product[]> {
   try {
@@ -123,6 +132,7 @@ export async function loadCloudProducts(): Promise<Product[]> {
   } catch {
     cloudProducts = []
   }
+  rebuildCache()
   return cloudProducts
 }
 
@@ -131,9 +141,14 @@ export function getCloudProducts(): Product[] {
 }
 
 export function getAllProducts(): Product[] {
-  return [...products, ...cloudProducts]
+  return cachedAll
 }
 
-export const getTrendingProducts = () => getAllProducts().filter(p => p.trending)
-export const getProductsByBrand = (brandSlug: string) => getAllProducts().filter(p => p.brandSlug === brandSlug)
-export const getProductById = (id: string) => getAllProducts().find(p => p.id === id)
+export const getTrendingProducts = () => cachedTrending
+export function getProductsByBrand(brandSlug: string): Product[] {
+  if (!cacheByBrand[brandSlug]) {
+    cacheByBrand[brandSlug] = cachedAll.filter(p => p.brandSlug === brandSlug)
+  }
+  return cacheByBrand[brandSlug]
+}
+export const getProductById = (id: string) => cachedAll.find(p => p.id === id)

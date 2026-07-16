@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Search, Menu, X, ChevronDown } from 'lucide-react'
@@ -12,14 +12,22 @@ export default function Navbar() {
   const [brandsOpen, setBrandsOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>()
   const { totalItems, openCart } = useCart()
   const location = useLocation()
   const navigate = useNavigate()
   const allProducts = getAllProducts()
 
+  useEffect(() => {
+    clearTimeout(debounceTimer.current)
+    debounceTimer.current = setTimeout(() => setDebouncedQuery(searchQuery), 200)
+    return () => clearTimeout(debounceTimer.current)
+  }, [searchQuery])
+
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return { brands: [], products: [] }
-    const q = searchQuery.toLowerCase()
+    if (!debouncedQuery.trim()) return { brands: [], products: [] }
+    const q = debouncedQuery.toLowerCase()
     const matchedBrands = brands.filter(b => b.name.toLowerCase().includes(q) || b.category.toLowerCase().includes(q))
     const matchedProducts = allProducts.filter(p =>
       p.name.toLowerCase().includes(q) ||
@@ -27,7 +35,7 @@ export default function Navbar() {
       p.description.toLowerCase().includes(q)
     ).slice(0, 8)
     return { brands: matchedBrands, products: matchedProducts }
-  }, [searchQuery, allProducts])
+  }, [debouncedQuery, allProducts])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -237,7 +245,7 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {searchQuery.trim() && (
+              {debouncedQuery.trim() && (
                 <div className="mt-2 bg-card border border-white/[0.08] rounded-2xl overflow-hidden max-h-[60vh] overflow-y-auto">
                   {searchResults.brands.length === 0 && searchResults.products.length === 0 && (
                     <div className="p-8 text-center text-muted text-sm">No results found for "{searchQuery}"</div>
