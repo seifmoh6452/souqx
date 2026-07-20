@@ -15,11 +15,30 @@ export default function ProductCard({ product, onQuickView }: Props) {
   const [wishlist, setWishlist] = useState(false)
   const [copyType, setCopyType] = useState<CopyType>('original')
   const [selectedSize, setSelectedSize] = useState<string>('')
+  const [selectedColor, setSelectedColor] = useState<string>('')
   const { addItem } = useCart()
 
   const displayPrice = getItemPrice(product, copyType)
   const hasHighCopy = !!product.highCopyPrice
   const hasMasterBox = !!product.masterBoxPrice
+
+  const hasImageColors = product.imageColors && product.imageColors.some(c => c)
+  const uniqueColors = hasImageColors
+    ? [...new Set(product.imageColors!.filter((c): c is string => !!c))]
+    : []
+
+  const filteredImages = hasImageColors && selectedColor
+    ? product.images.filter((_, i) => product.imageColors![i] === selectedColor)
+    : product.images
+
+  const handleColorSelect = (color: string) => {
+    if (selectedColor === color) {
+      setSelectedColor('')
+    } else {
+      setSelectedColor(color)
+      setImgIndex(0)
+    }
+  }
 
   return (
     <motion.div
@@ -37,15 +56,15 @@ export default function ProductCard({ product, onQuickView }: Props) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          src={product.images[imgIndex]}
+          src={filteredImages[imgIndex] || product.images[0]}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
 
         {/* Slider dots */}
-        {product.images.length > 1 && (
+        {filteredImages.length > 1 && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
-            {product.images.map((_, i) => (
+            {filteredImages.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setImgIndex(i)}
@@ -56,16 +75,16 @@ export default function ProductCard({ product, onQuickView }: Props) {
         )}
 
         {/* Slider arrows - always on mobile, hover on desktop */}
-        {product.images.length > 1 && (
+        {filteredImages.length > 1 && (
           <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             <button
-              onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i - 1 + product.images.length) % product.images.length) }}
+              onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i - 1 + filteredImages.length) % filteredImages.length) }}
               className="w-9 h-9 bg-black/50 backdrop-blur-sm rounded-lg flex items-center justify-center text-white"
             >
               <ChevronLeft size={16} />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i + 1) % product.images.length) }}
+              onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i + 1) % filteredImages.length) }}
               className="w-9 h-9 bg-black/50 backdrop-blur-sm rounded-lg flex items-center justify-center text-white"
             >
               <ChevronRight size={16} />
@@ -151,6 +170,25 @@ export default function ProductCard({ product, onQuickView }: Props) {
           </div>
         )}
 
+        {/* Color selector */}
+        {uniqueColors.length > 0 && (
+          <div className="flex gap-1 mb-3">
+            {uniqueColors.map(color => (
+              <button
+                key={color}
+                onClick={(e) => { e.stopPropagation(); handleColorSelect(color) }}
+                className={`flex-1 py-2 rounded-lg text-[11px] font-semibold border transition-all min-h-[36px] ${
+                  selectedColor === color
+                    ? 'bg-accent text-bg border-accent'
+                    : 'bg-transparent text-muted border-white/[0.06] hover:border-white/10'
+                }`}
+              >
+                {color}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Copy type selector */}
         {(hasHighCopy || hasMasterBox) && (
           <div className="flex gap-1 mb-3">
@@ -202,7 +240,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.92 }}
-            onClick={() => addItem(product, selectedSize || undefined, undefined, copyType)}
+            onClick={() => addItem(product, selectedSize || undefined, selectedColor || undefined, copyType)}
             className="w-11 h-11 bg-accent rounded-xl flex items-center justify-center text-bg hover:bg-accent-hover hover:shadow-glow-sm transition-all"
             aria-label="Add to cart"
           >
