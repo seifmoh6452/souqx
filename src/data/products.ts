@@ -14,6 +14,7 @@ export interface Product {
   description: string
   sizes?: string[]
   colors?: string[]
+  imageColors?: string[]
   inStock: boolean
   trending?: boolean
   new?: boolean

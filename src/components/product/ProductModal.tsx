@@ -43,6 +43,14 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
   const hasHighCopy = !!product.highCopyPrice
   const hasMasterBox = !!product.masterBoxPrice
 
+  const hasImageColors = product.imageColors && product.imageColors.some(c => c)
+  const uniqueColors = hasImageColors
+    ? [...new Set(product.imageColors!.filter((c): c is string => !!c))]
+    : []
+  const filteredImages = hasImageColors && selectedColor
+    ? product.images.filter((_, i) => product.imageColors![i] === selectedColor)
+    : product.images
+
   const handleAddToCart = () => {
     addItem(product, selectedSize || undefined, selectedColor || undefined, copyType)
     setAddedToCart(true)
@@ -101,7 +109,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.4 }}
-                      src={product.images[imageIndex]}
+                      src={filteredImages[imageIndex] || product.images[0]}
                       alt={product.name}
                       className={`w-full h-full ${product.brandSlug === 'mym' ? 'object-contain p-4 rounded-2xl' : 'object-cover'}`}
                     />
@@ -109,16 +117,16 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
                 </div>
 
                 {/* Navigation arrows */}
-                {product.images.length > 1 && (
+                {filteredImages.length > 1 && (
                   <>
                     <button
-                      onClick={() => setImageIndex(i => (i - 1 + product.images.length) % product.images.length)}
+                      onClick={() => setImageIndex(i => (i - 1 + filteredImages.length) % filteredImages.length)}
                       className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-black/70 transition-all"
                     >
                       <ChevronLeft size={18} />
                     </button>
                     <button
-                      onClick={() => setImageIndex(i => (i + 1) % product.images.length)}
+                      onClick={() => setImageIndex(i => (i + 1) % filteredImages.length)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-black/70 transition-all"
                     >
                       <ChevronRight size={18} />
@@ -143,9 +151,9 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
               </div>
 
               {/* Thumbnails - scrollable on mobile */}
-              {product.images.length > 1 && (
+              {filteredImages.length > 1 && (
                 <div className="flex gap-2 p-3 overflow-x-auto no-scrollbar">
-                  {product.images.map((img, i) => (
+                  {filteredImages.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setImageIndex(i)}
@@ -292,14 +300,14 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
               )}
 
               {/* Colors */}
-              {product.colors && product.colors.length > 0 && (
+              {uniqueColors.length > 0 && (
                 <div className="mb-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-widest mb-2">Color</p>
                   <div className="flex flex-wrap gap-2">
-                    {product.colors.map(color => (
+                    {uniqueColors.map(color => (
                       <button
                         key={color}
-                        onClick={() => setSelectedColor(color)}
+                        onClick={() => { setSelectedColor(selectedColor === color ? '' : color); setImageIndex(0) }}
                         className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all min-h-[44px] ${
                           selectedColor === color
                             ? 'bg-accent text-bg border-accent'
