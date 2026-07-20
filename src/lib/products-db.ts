@@ -10,7 +10,7 @@ const headers = {
 }
 
 export async function fetchSupabaseProducts(): Promise<Product[]> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/products?order=created_at.desc`, { headers })
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/products?order=created_at.asc`, { headers })
   if (!res.ok) return []
   const data = await res.json()
   return data.map((row: Record<string, unknown>) => ({
