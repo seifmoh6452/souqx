@@ -38,67 +38,87 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
 }
 
 export async function addSupabaseProduct(product: Product): Promise<void> {
+  const body: Record<string, unknown> = {
+    id: product.id,
+    brand_id: product.brandId,
+    brand_name: product.brandName,
+    brand_slug: product.brandSlug,
+    name: product.name,
+    price: product.price,
+    currency: product.currency,
+    category: product.category,
+    images: product.images,
+    description: product.description,
+    sizes: product.sizes || [],
+    in_stock: product.inStock,
+    trending: product.trending || false,
+    new_arrival: product.new || false,
+    whatsapp_number: product.whatsappNumber,
+    high_copy_price: product.highCopyPrice || null,
+    master_box_price: product.masterBoxPrice || null,
+    original_price: product.originalPrice || null,
+  }
+
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
     method: 'POST',
     headers: { ...headers, 'Prefer': 'return=minimal' },
-    body: JSON.stringify({
-      id: product.id,
-      brand_id: product.brandId,
-      brand_name: product.brandName,
-      brand_slug: product.brandSlug,
-      name: product.name,
-      price: product.price,
-      currency: product.currency,
-      category: product.category,
-      images: product.images,
-      description: product.description,
-      sizes: product.sizes || [],
-      colors: product.colors || [],
-      image_colors: product.imageColors || [],
-      in_stock: product.inStock,
-      trending: product.trending || false,
-      new_arrival: product.new || false,
-      whatsapp_number: product.whatsappNumber,
-      high_copy_price: product.highCopyPrice || null,
-      master_box_price: product.masterBoxPrice || null,
-      original_price: product.originalPrice || null,
-    }),
+    body: JSON.stringify(body),
   })
   if (!res.ok) {
     const err = await res.text()
     throw new Error(`Failed to add product: ${err}`)
   }
+
+  if (product.imageColors && product.imageColors.some(c => c)) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ image_colors: product.imageColors }),
+      })
+    } catch { /* column may not exist yet */ }
+  }
 }
 
 export async function updateSupabaseProduct(product: Product): Promise<void> {
+  const body: Record<string, unknown> = {
+    brand_id: product.brandId,
+    brand_name: product.brandName,
+    brand_slug: product.brandSlug,
+    name: product.name,
+    price: product.price,
+    currency: product.currency,
+    category: product.category,
+    images: product.images,
+    description: product.description,
+    sizes: product.sizes || [],
+    in_stock: product.inStock,
+    trending: product.trending || false,
+    new_arrival: product.new || false,
+    whatsapp_number: product.whatsappNumber,
+    high_copy_price: product.highCopyPrice || null,
+    master_box_price: product.masterBoxPrice || null,
+    original_price: product.originalPrice || null,
+  }
+
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
     method: 'PATCH',
     headers: { ...headers, 'Prefer': 'return=minimal' },
-    body: JSON.stringify({
-      brand_id: product.brandId,
-      brand_name: product.brandName,
-      brand_slug: product.brandSlug,
-      name: product.name,
-      price: product.price,
-      currency: product.currency,
-      category: product.category,
-      images: product.images,
-      description: product.description,
-      sizes: product.sizes || [],
-      colors: product.colors || [],
-      image_colors: product.imageColors || [],
-      in_stock: product.inStock,
-      trending: product.trending || false,
-      new_arrival: product.new || false,
-      whatsapp_number: product.whatsappNumber,
-      high_copy_price: product.highCopyPrice || null,
-      master_box_price: product.masterBoxPrice || null,
-      original_price: product.originalPrice || null,
-    }),
+    body: JSON.stringify(body),
   })
   if (!res.ok) {
     const err = await res.text()
     throw new Error(`Failed to update product: ${err}`)
+  }
+
+  if (product.imageColors && product.imageColors.some(c => c)) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ image_colors: product.imageColors }),
+      })
+    } catch { /* column may not exist yet */ }
   }
 }
 

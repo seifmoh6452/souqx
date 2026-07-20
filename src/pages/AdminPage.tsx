@@ -27,6 +27,7 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [filterBrand, setFilterBrand] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [, setRefresh] = useState(0)
 
   const handleLogin = (e: React.FormEvent) => {
@@ -151,6 +152,7 @@ export default function AdminPage() {
     setImageColors([])
     setSizes([])
     setEditingId(null)
+    setError('')
   }
 
   const handleSubmit = async () => {
@@ -203,6 +205,8 @@ export default function AdminPage() {
       setRefresh(r => r + 1)
     } catch (err) {
       console.error('Failed to save product:', err)
+      setError('Failed to save. Check console for details.')
+      setTimeout(() => setError(''), 4000)
     } finally {
       setLoading(false)
     }
@@ -397,6 +401,10 @@ export default function AdminPage() {
               ))}
             </div>
           </div>
+
+          {error && (
+            <p className="text-red-400 text-xs font-semibold text-center">{error}</p>
+          )}
 
           <div className="flex gap-3">
             {editingId && (
