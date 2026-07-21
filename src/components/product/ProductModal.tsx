@@ -314,12 +314,12 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
               {uniqueColors.length > 0 && (
                 <div className="mb-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-widest mb-2">Color</p>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {uniqueColors.map(color => (
                       <button
                         key={color}
                         onClick={() => { setSelectedColor(selectedColor === color ? '' : color); setImageIndex(0) }}
-                        className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all min-h-[44px] ${
+                        className={`flex-1 min-w-[calc(33.33%-6px)] px-3 py-2 rounded-xl text-xs font-semibold border transition-all min-h-[44px] ${
                           selectedColor === color
                             ? 'bg-accent text-bg border-accent'
                             : 'bg-white/[0.04] text-white border-white/[0.08] hover:border-white/20'
