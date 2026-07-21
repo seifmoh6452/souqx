@@ -27,6 +27,7 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     sizes: (row.sizes as string[]) || [],
     colors: (row.colors as string[]) || [],
     imageColors: (row.image_colors as string[]) || [],
+    sizeChart: (row.size_chart as string) || undefined,
     inStock: row.in_stock as boolean,
     trending: row.trending as boolean,
     new: row.new_arrival as boolean,
@@ -57,6 +58,7 @@ export async function addSupabaseProduct(product: Product): Promise<void> {
     high_copy_price: product.highCopyPrice || null,
     master_box_price: product.masterBoxPrice || null,
     original_price: product.originalPrice || null,
+    size_chart: product.sizeChart || null,
   }
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
@@ -69,12 +71,14 @@ export async function addSupabaseProduct(product: Product): Promise<void> {
     throw new Error(`Failed to add product: ${err}`)
   }
 
-  if (product.imageColors && product.imageColors.some(c => c)) {
+  const extra: Record<string, unknown> = {}
+  if (product.imageColors && product.imageColors.some(c => c)) extra.image_colors = product.imageColors
+  if (Object.keys(extra).length > 0) {
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
         method: 'PATCH',
         headers: { ...headers, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ image_colors: product.imageColors }),
+        body: JSON.stringify(extra),
       })
     } catch { /* column may not exist yet */ }
   }
@@ -99,6 +103,7 @@ export async function updateSupabaseProduct(product: Product): Promise<void> {
     high_copy_price: product.highCopyPrice || null,
     master_box_price: product.masterBoxPrice || null,
     original_price: product.originalPrice || null,
+    size_chart: product.sizeChart || null,
   }
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
@@ -111,12 +116,14 @@ export async function updateSupabaseProduct(product: Product): Promise<void> {
     throw new Error(`Failed to update product: ${err}`)
   }
 
-  if (product.imageColors && product.imageColors.some(c => c)) {
+  const extra: Record<string, unknown> = {}
+  if (product.imageColors && product.imageColors.some(c => c)) extra.image_colors = product.imageColors
+  if (Object.keys(extra).length > 0) {
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
         method: 'PATCH',
         headers: { ...headers, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ image_colors: product.imageColors }),
+        body: JSON.stringify(extra),
       })
     } catch { /* column may not exist yet */ }
   }

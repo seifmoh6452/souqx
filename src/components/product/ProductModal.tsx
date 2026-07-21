@@ -19,6 +19,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
   const [quantity, setQuantity] = useState(1)
   const [wishlist, setWishlist] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [showSizeChart, setShowSizeChart] = useState(false)
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -280,7 +281,17 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
               {/* Sizes */}
               {product.sizes && product.sizes.length > 0 && (
                 <div className="mb-4">
-                  <p className="text-[11px] font-semibold text-muted uppercase tracking-widest mb-2">Size</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-[11px] font-semibold text-muted uppercase tracking-widest">Size</p>
+                    {product.sizeChart && (
+                      <button
+                        onClick={() => setShowSizeChart(true)}
+                        className="text-[11px] font-semibold text-accent hover:text-accent-hover underline transition-colors"
+                      >
+                        Size Chart
+                      </button>
+                    )}
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {product.sizes.map(size => (
                       <button
@@ -384,6 +395,40 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
           )}
         </motion.div>
       </motion.div>
+
+      {/* Size Chart Lightbox */}
+      <AnimatePresence>
+        {showSizeChart && product.sizeChart && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-xl"
+            onClick={() => setShowSizeChart(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-lg w-[90%] max-h-[85vh] rounded-2xl overflow-hidden bg-[#0d0d0d] border border-white/[0.08]"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-3 border-b border-white/[0.06]">
+                <p className="text-sm font-bold text-white">Size Chart</p>
+                <button
+                  onClick={() => setShowSizeChart(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.06] text-muted hover:text-white transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="p-4 overflow-y-auto max-h-[calc(85vh-56px)]">
+                <img src={product.sizeChart} alt="Size Chart" className="w-full h-auto rounded-xl" />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </AnimatePresence>
   )
 }

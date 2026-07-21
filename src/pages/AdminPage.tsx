@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [images, setImages] = useState<string[]>([])
   const [imageColors, setImageColors] = useState<string[]>([])
   const [sizes, setSizes] = useState<string[]>([])
+  const [sizeChart, setSizeChart] = useState('')
   const [saved, setSaved] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [filterBrand, setFilterBrand] = useState('')
@@ -151,6 +152,7 @@ export default function AdminPage() {
     setImages([])
     setImageColors([])
     setSizes([])
+    setSizeChart('')
     setEditingId(null)
     setError('')
   }
@@ -175,6 +177,7 @@ export default function AdminPage() {
             images,
             sizes: sizes.length > 0 ? sizes : undefined,
             imageColors: imageColors.some(c => c) ? imageColors : undefined,
+            sizeChart: sizeChart || undefined,
           })
         }
       } else {
@@ -192,6 +195,7 @@ export default function AdminPage() {
           description: description || `${name} from ${brand.name}`,
           sizes: sizes.length > 0 ? sizes : undefined,
           imageColors: imageColors.some(c => c) ? imageColors : undefined,
+          sizeChart: sizeChart || undefined,
           inStock: true,
           whatsappNumber: '+201001234567',
         }
@@ -222,6 +226,7 @@ export default function AdminPage() {
     setImages([...product.images])
     setImageColors(product.imageColors ? [...product.imageColors] : product.images.map(() => ''))
     setSizes(product.sizes || [])
+    setSizeChart(product.sizeChart || '')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -400,6 +405,40 @@ export default function AdminPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Size Chart (optional)</label>
+            {sizeChart && (
+              <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-white/[0.08] mb-2">
+                <img src={sizeChart} alt="Size chart" className="w-full h-full object-contain bg-[#0f0f0f]" />
+                <button
+                  onClick={() => setSizeChart('')}
+                  className="absolute top-1 right-1 w-6 h-6 flex items-center justify-center rounded-lg bg-red-500/20 backdrop-blur text-red-400 hover:bg-red-500/30 text-xs"
+                >
+                  &#10005;
+                </button>
+              </div>
+            )}
+            <label className="flex items-center justify-center w-full h-16 border-2 border-dashed border-white/[0.08] rounded-xl cursor-pointer hover:border-white/20 transition-colors">
+              <div className="flex items-center gap-2 text-muted">
+                <Upload size={18} />
+                <span className="text-sm">{sizeChart ? 'Replace size chart' : 'Upload size chart image'}</span>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = () => setSizeChart(reader.result as string)
+                  reader.readAsDataURL(file)
+                  e.target.value = ''
+                }}
+                className="hidden"
+              />
+            </label>
           </div>
 
           {error && (
