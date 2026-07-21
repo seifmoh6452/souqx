@@ -66,6 +66,7 @@ export default function Footer() {
                 { label: 'GLASSWEAR', to: '/brand/glasswear' },
                 { label: 'WATCH EYE', to: '/brand/watcheye' },
                 { label: 'WANTS & NEEDS', to: '/brand/wantsneeds' },
+                { label: 'GIRL MATH', to: '/brand/girlmath' },
               ].map(link => (
                 <li key={link.label}>
                   <Link to={link.to} className="text-muted text-sm hover:text-white transition-colors inline-flex items-center min-h-[36px] sm:min-h-[40px]">
