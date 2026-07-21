@@ -89,7 +89,7 @@ export const brands: Brand[] = [
     name: 'Girl Math',
     slug: 'girlmath',
     tagline: 'Basics That Hit Different',
-    description: 'Girl Math is your go-to for high-quality women\'s basics — clean tops, elevated tank tops, and buttery-soft sweatpants. Minimal pieces, maximum outfit potential. Look expensive without the price tag.',
+    description: 'Girl Math is your go-to for high-quality women\'s basics — clean tops, elevated tank tops, and buttery-soft sweatpants. Minimal pieces, maximum outfit potential. Look expensive without the price tag. All products are 95% cotton, 5% lycra.',
     coverImage: 'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1400&q=85&fit=crop',
     logo: '/logos/girlmath.jpeg',
     logoBg: 'light',
