@@ -249,8 +249,9 @@ export default function AdminPage() {
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(toIndex, 0, moved)
 
+    const cloudOnly = reordered.filter(id => cloudIds.has(id))
     try {
-      await reorderSupabaseProducts(reordered)
+      await reorderSupabaseProducts(cloudOnly)
       await loadCloudProducts()
       setRefresh(r => r + 1)
     } catch (err) {
