@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ShoppingBag, Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ShoppingBag, Heart, Eye, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { useCart, getItemPrice, type CopyType } from '../../context/CartContext'
 import BrandLogo from '../brand/BrandLogo'
@@ -16,6 +16,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
   const [copyType, setCopyType] = useState<CopyType>('original')
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
+  const [showSizeChart, setShowSizeChart] = useState(false)
   const { addItem } = useCart()
 
   const displayPrice = getItemPrice(product, copyType)
@@ -41,6 +42,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
   }
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +155,19 @@ export default function ProductCard({ product, onQuickView }: Props) {
 
         {/* Size selector */}
         {product.sizes && product.sizes.length > 0 && (
-          <div className="flex gap-1 mb-3">
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted uppercase tracking-widest">Size</p>
+              {product.sizeChart && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowSizeChart(true) }}
+                  className="text-[10px] font-semibold text-accent hover:text-accent-hover underline transition-colors"
+                >
+                  Size Chart
+                </button>
+              )}
+            </div>
+            <div className="flex gap-1">
             {product.sizes.map(size => (
               <button
                 key={size}
@@ -167,6 +181,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
                 {size}
               </button>
             ))}
+            </div>
           </div>
         )}
 
@@ -249,5 +264,40 @@ export default function ProductCard({ product, onQuickView }: Props) {
         </div>
       </div>
     </motion.div>
+
+    {/* Size Chart Lightbox */}
+    <AnimatePresence>
+      {showSizeChart && product.sizeChart && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-xl"
+          onClick={() => setShowSizeChart(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="relative max-w-lg w-[90%] max-h-[85vh] rounded-2xl overflow-hidden bg-[#0d0d0d] border border-white/[0.08]"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-3 border-b border-white/[0.06]">
+              <p className="text-sm font-bold text-white">Size Chart</p>
+              <button
+                onClick={() => setShowSizeChart(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.06] text-muted hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto max-h-[calc(85vh-56px)]">
+              <img src={product.sizeChart} alt="Size Chart" className="w-full h-auto rounded-xl" />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   )
 }
