@@ -314,7 +314,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
               {uniqueColors.length > 0 && (
                 <div className="mb-5">
                   <p className="text-[11px] font-semibold text-muted uppercase tracking-widest mb-2">Color</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-3 gap-2">
                     {uniqueColors.map(color => (
                       <button
                         key={color}

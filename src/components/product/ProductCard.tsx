@@ -187,7 +187,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
 
         {/* Color selector */}
         {uniqueColors.length > 0 && (
-          <div className="flex gap-1 mb-3">
+          <div className="grid grid-cols-3 gap-1 mb-3">
             {uniqueColors.map(color => (
               <button
                 key={color}
