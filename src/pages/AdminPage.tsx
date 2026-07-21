@@ -241,22 +241,22 @@ export default function AdminPage() {
     }
   }
 
-  const handleReorder = async (brandSlug: string, fromIndex: number, direction: 'up' | 'down') => {
-    const brandProducts = allProducts.filter(p => p.brandSlug === brandSlug)
+  const handleReorder = async (brandProductIds: string[], fromIndex: number, direction: 'up' | 'down') => {
     const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1
-    if (toIndex < 0 || toIndex >= brandProducts.length) return
+    if (toIndex < 0 || toIndex >= brandProductIds.length) return
 
-    const reordered = [...brandProducts]
+    const reordered = [...brandProductIds]
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(toIndex, 0, moved)
 
-    const ids = reordered.map(p => p.id)
     try {
-      await reorderSupabaseProducts(ids)
+      await reorderSupabaseProducts(reordered)
       await loadCloudProducts()
       setRefresh(r => r + 1)
     } catch (err) {
       console.error('Failed to reorder:', err)
+      setError('Failed to reorder. Check console.')
+      setTimeout(() => setError(''), 4000)
     }
   }
 
@@ -556,7 +556,7 @@ export default function AdminPage() {
                                 <div className="flex gap-1">
                                   {idx > 0 && (
                                     <button
-                                      onClick={() => handleReorder(b.slug, idx, 'up')}
+                                      onClick={() => handleReorder(brandProducts.map(p => p.id), idx, 'up')}
                                       className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
                                     >
                                       <ChevronUp size={12} />
@@ -564,7 +564,7 @@ export default function AdminPage() {
                                   )}
                                   {idx < brandProducts.length - 1 && (
                                     <button
-                                      onClick={() => handleReorder(b.slug, idx, 'down')}
+                                      onClick={() => handleReorder(brandProducts.map(p => p.id), idx, 'down')}
                                       className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
                                     >
                                       <ChevronDown size={12} />
