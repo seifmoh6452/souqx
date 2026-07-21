@@ -552,26 +552,26 @@ export default function AdminPage() {
                                 <p className="text-muted text-[10px] mt-0.5">{p.sizes.join(' · ')}</p>
                               )}
                             </div>
-                            {isCloud && (
-                              <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="flex gap-1">
-                                  {idx > 0 && (
-                                    <button
-                                      onClick={() => handleReorder(brandProducts.map(p => p.id), idx, 'up')}
-                                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
-                                    >
-                                      <ChevronUp size={12} />
-                                    </button>
-                                  )}
-                                  {idx < brandProducts.length - 1 && (
-                                    <button
-                                      onClick={() => handleReorder(brandProducts.map(p => p.id), idx, 'down')}
-                                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
-                                    >
-                                      <ChevronDown size={12} />
-                                    </button>
-                                  )}
-                                </div>
+                            <div className="absolute top-2 right-2 flex flex-col gap-1">
+                              <div className="flex gap-1">
+                                {idx > 0 && (
+                                  <button
+                                    onClick={() => handleReorder(brandProducts.map(pp => pp.id), idx, 'up')}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
+                                  >
+                                    <ChevronUp size={12} />
+                                  </button>
+                                )}
+                                {idx < brandProducts.length - 1 && (
+                                  <button
+                                    onClick={() => handleReorder(brandProducts.map(pp => pp.id), idx, 'down')}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
+                                  >
+                                    <ChevronDown size={12} />
+                                  </button>
+                                )}
+                              </div>
+                              {isCloud && (
                                 <div className="flex gap-1">
                                   <button
                                     onClick={() => handleEdit(p)}
@@ -586,8 +586,8 @@ export default function AdminPage() {
                                     <Trash2 size={12} />
                                   </button>
                                 </div>
+                              )}
                               </div>
-                            )}
                           </div>
                         )
                       })}
