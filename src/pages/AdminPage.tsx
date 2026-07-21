@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp, Lock } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp, Lock, ChevronUp, ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
 import { getAllProducts, getCloudProducts, loadCloudProducts } from '../data/products'
-import { addSupabaseProduct, updateSupabaseProduct, deleteSupabaseProduct } from '../lib/products-db'
+import { addSupabaseProduct, updateSupabaseProduct, deleteSupabaseProduct, reorderSupabaseProducts } from '../lib/products-db'
 import type { Product } from '../data/products'
 
 const ADMIN_USER = 'admin'
@@ -238,6 +238,25 @@ export default function AdminPage() {
       setRefresh(r => r + 1)
     } catch (err) {
       console.error('Failed to delete product:', err)
+    }
+  }
+
+  const handleReorder = async (brandSlug: string, fromIndex: number, direction: 'up' | 'down') => {
+    const brandProducts = allProducts.filter(p => p.brandSlug === brandSlug)
+    const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1
+    if (toIndex < 0 || toIndex >= brandProducts.length) return
+
+    const reordered = [...brandProducts]
+    const [moved] = reordered.splice(fromIndex, 1)
+    reordered.splice(toIndex, 0, moved)
+
+    const ids = reordered.map(p => p.id)
+    try {
+      await reorderSupabaseProducts(ids)
+      await loadCloudProducts()
+      setRefresh(r => r + 1)
+    } catch (err) {
+      console.error('Failed to reorder:', err)
     }
   }
 
@@ -510,7 +529,7 @@ export default function AdminPage() {
                       <span className="text-xs text-muted">{brandProducts.length} products</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      {brandProducts.map(p => {
+                      {brandProducts.map((p, idx) => {
                         const isCloud = cloudIds.has(p.id)
                         return (
                           <div key={p.id} className="relative bg-card border border-white/[0.06] rounded-xl overflow-hidden group">
@@ -533,19 +552,39 @@ export default function AdminPage() {
                               )}
                             </div>
                             {isCloud && (
-                              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                  onClick={() => handleEdit(p)}
-                                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
-                                >
-                                  <Pencil size={12} />
-                                </button>
-                                <button
-                                  onClick={() => handleRemove(p.id)}
-                                  className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-red-400 transition-all"
-                                >
-                                  <Trash2 size={12} />
-                                </button>
+                              <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="flex gap-1">
+                                  {idx > 0 && (
+                                    <button
+                                      onClick={() => handleReorder(b.slug, idx, 'up')}
+                                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
+                                    >
+                                      <ChevronUp size={12} />
+                                    </button>
+                                  )}
+                                  {idx < brandProducts.length - 1 && (
+                                    <button
+                                      onClick={() => handleReorder(b.slug, idx, 'down')}
+                                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
+                                    >
+                                      <ChevronDown size={12} />
+                                    </button>
+                                  )}
+                                </div>
+                                <div className="flex gap-1">
+                                  <button
+                                    onClick={() => handleEdit(p)}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-accent transition-all"
+                                  >
+                                    <Pencil size={12} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleRemove(p.id)}
+                                    className="w-7 h-7 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur text-white hover:text-red-400 transition-all"
+                                  >
+                                    <Trash2 size={12} />
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>

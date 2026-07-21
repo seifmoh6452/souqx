@@ -10,7 +10,7 @@ const headers = {
 }
 
 export async function fetchSupabaseProducts(): Promise<Product[]> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/products?order=created_at.asc`, { headers })
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/products?order=sort_order.asc,created_at.asc`, { headers })
   if (!res.ok) return []
   const data = await res.json()
   return data.map((row: Record<string, unknown>) => ({
@@ -28,6 +28,7 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     colors: (row.colors as string[]) || [],
     imageColors: (row.image_colors as string[]) || [],
     sizeChart: (row.size_chart as string) || undefined,
+    sortOrder: (row.sort_order as number) ?? 0,
     inStock: row.in_stock as boolean,
     trending: row.trending as boolean,
     new: row.new_arrival as boolean,
@@ -59,6 +60,7 @@ export async function addSupabaseProduct(product: Product): Promise<void> {
     master_box_price: product.masterBoxPrice || null,
     original_price: product.originalPrice || null,
     size_chart: product.sizeChart || null,
+    sort_order: product.sortOrder ?? 0,
   }
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
@@ -104,6 +106,7 @@ export async function updateSupabaseProduct(product: Product): Promise<void> {
     master_box_price: product.masterBoxPrice || null,
     original_price: product.originalPrice || null,
     size_chart: product.sizeChart || null,
+    sort_order: product.sortOrder ?? 0,
   }
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${product.id}`, {
@@ -137,5 +140,15 @@ export async function deleteSupabaseProduct(id: string): Promise<void> {
   if (!res.ok) {
     const err = await res.text()
     throw new Error(`Failed to delete product: ${err}`)
+  }
+}
+
+export async function reorderSupabaseProducts(ids: string[]): Promise<void> {
+  for (let i = 0; i < ids.length; i++) {
+    await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${ids[i]}`, {
+      method: 'PATCH',
+      headers: { ...headers, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ sort_order: i }),
+    })
   }
 }
