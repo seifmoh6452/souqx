@@ -249,15 +249,12 @@ export default function AdminPage() {
     const [moved] = reordered.splice(fromIndex, 1)
     reordered.splice(toIndex, 0, moved)
 
-    const cloudOnly = reordered.filter(id => cloudIds.has(id))
     try {
-      await reorderSupabaseProducts(cloudOnly)
+      await reorderSupabaseProducts(reordered)
       await loadCloudProducts()
       setRefresh(r => r + 1)
     } catch (err) {
       console.error('Failed to reorder:', err)
-      setError('Failed to reorder. Check console.')
-      setTimeout(() => setError(''), 4000)
     }
   }
 

@@ -145,14 +145,10 @@ export async function deleteSupabaseProduct(id: string): Promise<void> {
 
 export async function reorderSupabaseProducts(ids: string[]): Promise<void> {
   for (let i = 0; i < ids.length; i++) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${ids[i]}`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${ids[i]}`, {
       method: 'PATCH',
       headers: { ...headers, 'Prefer': 'return=minimal' },
       body: JSON.stringify({ sort_order: i }),
     })
-    if (!res.ok) {
-      const err = await res.text()
-      throw new Error(`Failed to reorder product ${ids[i]}: ${err}`)
-    }
   }
 }
