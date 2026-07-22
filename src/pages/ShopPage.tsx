@@ -7,11 +7,12 @@ import type { Product } from '../data/products'
 import ProductCard from '../components/product/ProductCard'
 import ProductModal from '../components/product/ProductModal'
 
-type Category = 'perfumes' | 'clothes' | 'glasses' | 'watches' | 'accessories'
+type Category = 'perfumes' | 'clothes' | 'basics' | 'glasses' | 'watches' | 'accessories'
 
 const categories: { id: Category; label: string; icon: typeof Sparkles; desc: string }[] = [
   { id: 'perfumes', label: 'Perfumes', icon: Sparkles, desc: 'Premium fragrances from MYM' },
   { id: 'clothes', label: 'Clothes', icon: Shirt, desc: 'Streetwear, tees, hoodies & more' },
+  { id: 'basics', label: 'Basics', icon: Shirt, desc: "High-quality women's basics from Girl Math" },
   { id: 'glasses', label: 'Glasses', icon: Glasses, desc: 'Sunglasses & eyewear from GLASSWEAR' },
   { id: 'watches', label: 'Watches', icon: Watch, desc: 'Premium watches from WATCH EYE' },
   { id: 'accessories', label: 'Accessories', icon: Watch, desc: 'Essentials & extras' },
@@ -21,6 +22,7 @@ function matchCategory(product: Product, cat: Category): boolean {
   const c = product.category.toLowerCase()
   if (cat === 'perfumes') return c === 'perfumes' || product.brandSlug === 'mym'
   if (cat === 'clothes') return c === 't-shirts' || c === 'hoodies' || c === 'sets' || c === 'pants' || c === 'fashion' || product.brandSlug === 'modesta'
+  if (cat === 'basics') return product.brandSlug === 'girlmath'
   if (cat === 'glasses') return product.brandSlug === 'glasswear' || c === 'eyewear' && product.brandSlug === 'glasswear'
   if (cat === 'watches') return product.brandSlug === 'watcheye' || c === 'watches'
   if (cat === 'accessories') return product.brandSlug === 'wantsneeds'
