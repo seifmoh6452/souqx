@@ -11,7 +11,6 @@ const logoMap: Record<string, { src: string; bg: 'dark' | 'light' | 'blue' }> = 
   watcher:    { src: '/logos/watcheye.jpeg',   bg: 'blue'  },
   watcheye:   { src: '/logos/watcheye.jpeg',   bg: 'blue'  },
   wantsneeds: { src: '/logos/wantsneeds.jpeg', bg: 'blue'  },
-  girlmath:   { src: '/logos/girlmath.jpeg',   bg: 'light' },
 }
 
 export default function BrandLogo({ slug, className = '', size = 40 }: Props) {
@@ -20,12 +19,12 @@ export default function BrandLogo({ slug, className = '', size = 40 }: Props) {
   if (!brand) {
     return (
       <div
-        className={`bg-surface-2 text-ink ${className}`}
+        className={className}
         style={{
           width: size, height: size,
-          borderRadius: size * 0.2,
+          borderRadius: 8, background: '#121212',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontWeight: 900, fontSize: size * 0.25,
+          color: 'white', fontWeight: 900, fontSize: size * 0.25,
         }}
       >
         {slug.slice(0, 2).toUpperCase()}
@@ -41,8 +40,9 @@ export default function BrandLogo({ slug, className = '', size = 40 }: Props) {
       style={{
         width: size, height: size,
         objectFit: 'contain',
-        borderRadius: size * 0.2,
-        background: brand.bg === 'light' ? '#ffffff' : brand.bg === 'blue' ? '#0a0a0a' : '#0a0a0a',
+        borderRadius: 8,
+        background: brand.bg === 'light' ? '#fff' : brand.bg === 'blue' ? '#071428' : '#000',
+        mixBlendMode: brand.bg === 'light' ? 'screen' : 'normal',
       }}
     />
   )

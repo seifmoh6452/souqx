@@ -14,9 +14,6 @@ export interface Product {
   description: string
   sizes?: string[]
   colors?: string[]
-  imageColors?: string[]
-  sizeChart?: string
-  sortOrder?: number
   inStock: boolean
   trending?: boolean
   new?: boolean
