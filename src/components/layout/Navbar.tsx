@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Search, Menu, X, ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion'
+import { ShoppingBag, Search, Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { brands } from '../../data/brands'
 import { getAllProducts } from '../../data/products'
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [brandsOpen, setBrandsOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -18,6 +17,12 @@ export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const allProducts = getAllProducts()
+  const { scrollY } = useScroll()
+  const [scrolled, setScrolled] = useState(false)
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setScrolled(latest > 50)
+  })
 
   useEffect(() => {
     clearTimeout(debounceTimer.current)
@@ -36,12 +41,6 @@ export default function Navbar() {
     ).slice(0, 8)
     return { brands: matchedBrands, products: matchedProducts }
   }, [debouncedQuery, allProducts])
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     setMobileOpen(false)
@@ -64,97 +63,111 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           scrolled
-            ? 'bg-bg/80 backdrop-blur-2xl border-b border-white/[0.06]'
+            ? 'bg-white/80 backdrop-blur-2xl border-b border-ink/[0.04] shadow-soft'
             : 'bg-transparent'
         }`}
       >
-        <div className="container-wide section-padding">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+        <div className="container-xl section">
+          <div className="flex items-center justify-between h-16 sm:h-[72px]">
             {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-1">
-                <span className="text-white font-black text-xl sm:text-2xl tracking-tighter">SOUQ</span>
-                <span className="text-accent font-black text-xl sm:text-2xl tracking-tighter">X</span>
-              </motion.div>
+            <Link to="/" className="flex items-center gap-0.5 relative z-10">
+              <motion.span
+                layout
+                className="text-ink font-black text-2xl sm:text-[28px] tracking-[-0.06em]"
+              >
+                SOUQ
+              </motion.span>
+              <motion.span
+                layout
+                className="text-accent font-black text-2xl sm:text-[28px] tracking-[-0.06em]"
+              >
+                X
+              </motion.span>
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1">
               <NavLink to="/">Home</NavLink>
 
-              <div className="relative" onMouseEnter={() => setBrandsOpen(true)} onMouseLeave={() => setBrandsOpen(false)}>
-                <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">
+              <div
+                className="relative"
+                onMouseEnter={() => setBrandsOpen(true)}
+                onMouseLeave={() => setBrandsOpen(false)}
+              >
+                <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-ink-secondary hover:text-ink transition-colors rounded-full hover:bg-ink/[0.03]">
                   Brands
-                  <ChevronDown size={14} className={`transition-transform ${brandsOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={12} className={`transition-transform duration-300 ${brandsOpen ? 'rotate-180' : ''}`} />
                 </button>
+
                 <AnimatePresence>
                   {brandsOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                      initial={{ opacity: 0, y: 12, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-64 rounded-2xl p-2 shadow-2xl border border-white/[0.08]"
-                      style={{ background: '#111111' }}
+                      exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[480px] rounded-3xl p-3 glass shadow-heavy"
                     >
-                      {brands.map(brand => (
-                        <Link
-                          key={brand.id}
-                          to={`/brand/${brand.slug}`}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors group"
-                        >
-                          <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0" style={{ background: '#090909' }}>
-                            <img
-                              src={`/logos/${brand.slug}.jpeg`}
-                              alt={brand.name}
-                              className="w-full h-full object-cover"
-                              style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }}
-                            />
-                          </div>
-                          <div>
-                            <div className="text-sm font-semibold text-white group-hover:text-accent transition-colors">{brand.name}</div>
-                            <div className="text-xs text-muted">{allProducts.filter(p => p.brandSlug === brand.slug).length} items</div>
-                          </div>
-                        </Link>
-                      ))}
+                      <div className="grid grid-cols-2 gap-1">
+                        {brands.map(brand => (
+                          <Link
+                            key={brand.id}
+                            to={`/brand/${brand.slug}`}
+                            className="flex items-center gap-3 px-3 py-3 rounded-2xl hover:bg-ink/[0.04] transition-all group"
+                          >
+                            <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-surface-2">
+                              <img
+                                src={`/logos/${brand.slug}.jpeg`}
+                                alt={brand.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[13px] font-bold text-ink group-hover:text-accent transition-colors">{brand.name}</div>
+                              <div className="text-[11px] text-ink-tertiary">{brand.category}</div>
+                            </div>
+                            <ArrowUpRight size={14} className="text-ink-faint group-hover:text-accent transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </Link>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
               <NavLink to="/#categories">Categories</NavLink>
-              <NavLink to="/become-a-seller">Become a Seller</NavLink>
-            </div>
+              <NavLink to="/become-a-seller">Sell</NavLink>
+            </nav>
 
-            {/* Right actions */}
-            <div className="flex items-center gap-1">
+            {/* Right */}
+            <div className="flex items-center gap-1.5 relative z-10">
               <motion.button
-                whileTap={{ scale: 0.92 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setSearchOpen(true)}
-                className="w-11 h-11 flex items-center justify-center rounded-xl text-muted hover:text-white hover:bg-white/5 transition-all"
+                className="w-10 h-10 flex items-center justify-center rounded-full text-ink-secondary hover:text-ink hover:bg-ink/[0.04] transition-all"
                 aria-label="Search"
               >
-                <Search size={19} />
+                <Search size={18} strokeWidth={2} />
               </motion.button>
 
               <motion.button
-                whileTap={{ scale: 0.92 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={openCart}
-                className="relative w-11 h-11 flex items-center justify-center rounded-xl text-muted hover:text-white hover:bg-white/5 transition-all"
+                className="relative w-10 h-10 flex items-center justify-center rounded-full text-ink-secondary hover:text-ink hover:bg-ink/[0.04] transition-all"
                 aria-label="Cart"
               >
-                <ShoppingBag size={19} />
+                <ShoppingBag size={18} strokeWidth={2} />
                 {totalItems > 0 && (
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute top-1.5 right-1 min-w-[18px] h-[18px] bg-accent text-bg text-[10px] font-black rounded-full flex items-center justify-center px-1"
+                    className="absolute top-1 right-0.5 min-w-[16px] h-[16px] bg-accent text-ink text-[9px] font-black rounded-full flex items-center justify-center px-1"
                   >
                     {totalItems > 99 ? '99+' : totalItems}
                   </motion.span>
@@ -163,7 +176,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden w-11 h-11 flex items-center justify-center rounded-xl text-muted hover:text-white hover:bg-white/5 transition-all"
+                className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full text-ink-secondary hover:text-ink hover:bg-ink/[0.04] transition-all"
                 aria-label="Menu"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -171,7 +184,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </motion.nav>
+      </motion.header>
 
       {/* Backdrop */}
       <AnimatePresence>
@@ -180,7 +193,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-ink/20 backdrop-blur-md"
             onClick={() => { setMobileOpen(false); setSearchOpen(false) }}
           />
         )}
@@ -193,80 +206,105 @@ export default function Navbar() {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-y-0 right-0 w-full max-w-sm z-50 bg-bg border-l border-white/[0.06] flex flex-col pt-20 pb-8 px-6 overscroll-contain"
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-y-0 right-0 w-full max-w-[360px] z-50 bg-white flex flex-col overscroll-contain"
           >
-            <div className="flex flex-col gap-0.5">
-              <MobileNavLink to="/" onClick={() => setMobileOpen(false)}>Home</MobileNavLink>
-              <div className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 pt-5 pb-2">Brands</div>
-              {brands.map(brand => (
-                <MobileNavLink key={brand.id} to={`/brand/${brand.slug}`} onClick={() => setMobileOpen(false)}>
-                  {brand.name}
-                </MobileNavLink>
-              ))}
-              <div className="h-px bg-white/[0.06] my-3" />
-              <MobileNavLink to="/#categories" onClick={() => setMobileOpen(false)}>Categories</MobileNavLink>
-              <MobileNavLink to="/become-a-seller" onClick={() => setMobileOpen(false)}>Become a Seller</MobileNavLink>
+            <div className="flex items-center justify-between px-6 pt-20 pb-4">
+              <span className="text-xs font-bold text-ink-tertiary tracking-[0.2em] uppercase">Menu</span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-surface-2"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="flex-1 px-6 pb-8 overflow-y-auto">
+              <div className="space-y-1">
+                <MobileNavLink to="/" onClick={() => setMobileOpen(false)}>Home</MobileNavLink>
+                <MobileNavLink to="/shop" onClick={() => setMobileOpen(false)}>Shop</MobileNavLink>
+                <MobileNavLink to="/#categories" onClick={() => setMobileOpen(false)}>Categories</MobileNavLink>
+                <MobileNavLink to="/become-a-seller" onClick={() => setMobileOpen(false)}>Become a Seller</MobileNavLink>
+              </div>
+
+              <div className="divider my-6" />
+
+              <p className="text-[10px] font-bold text-ink-tertiary tracking-[0.2em] uppercase mb-3">Brands</p>
+              <div className="space-y-0.5">
+                {brands.map(brand => (
+                  <Link
+                    key={brand.id}
+                    to={`/brand/${brand.slug}`}
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 py-3 text-ink hover:text-accent transition-colors group"
+                  >
+                    <div className="w-8 h-8 rounded-lg overflow-hidden bg-surface-2 flex-shrink-0">
+                      <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" />
+                    </div>
+                    <span className="text-sm font-semibold">{brand.name}</span>
+                    <ArrowUpRight size={12} className="ml-auto text-ink-faint group-hover:text-accent transition-colors" />
+                  </Link>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Search overlay */}
+      {/* Search */}
       <AnimatePresence>
         {searchOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4"
+            className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4"
             onClick={() => { setSearchOpen(false); setSearchQuery('') }}
           >
             <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="w-full max-w-2xl"
+              initial={{ y: -30, opacity: 0, scale: 0.97 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -30, opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-[560px]"
               onClick={e => e.stopPropagation()}
             >
               <div className="relative">
-                <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+                <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-ink-tertiary" />
                 <input
                   autoFocus
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search brands, products..."
-                  className="w-full pl-12 pr-14 py-4 bg-card border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:border-accent/40 text-base sm:text-lg"
+                  placeholder="Search anything..."
+                  className="w-full pl-13 pr-14 py-4.5 bg-white rounded-2xl text-ink placeholder-ink-faint focus:outline-none focus:ring-2 focus:ring-accent/20 text-base shadow-heavy border border-ink/[0.04]"
                 />
                 <button
                   onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl text-muted hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-surface-2 text-ink-tertiary hover:text-ink transition-colors text-xs font-bold"
                 >
-                  <X size={20} />
+                  ESC
                 </button>
               </div>
 
               {debouncedQuery.trim() && (
-                <div className="mt-2 bg-card border border-white/[0.08] rounded-2xl overflow-hidden max-h-[60vh] overflow-y-auto">
+                <div className="mt-2 bg-white rounded-2xl overflow-hidden max-h-[50vh] overflow-y-auto shadow-heavy border border-ink/[0.04]">
                   {searchResults.brands.length === 0 && searchResults.products.length === 0 && (
-                    <div className="p-8 text-center text-muted text-sm">No results found for "{searchQuery}"</div>
+                    <div className="p-10 text-center text-ink-tertiary text-sm">Nothing found for "{searchQuery}"</div>
                   )}
 
                   {searchResults.brands.length > 0 && (
                     <div className="p-2">
-                      <p className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 py-2">Brands</p>
+                      <p className="text-[10px] font-bold text-ink-tertiary tracking-[0.15em] uppercase px-3 py-2">Brands</p>
                       {searchResults.brands.map(brand => (
                         <Link
                           key={brand.id}
                           to={`/brand/${brand.slug}`}
                           onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-2 transition-colors"
                         >
-                          <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
+                          <div className="w-9 h-9 rounded-lg overflow-hidden bg-surface-2 flex-shrink-0">
                             <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" />
                           </div>
                           <div>
-                            <div className="text-sm font-semibold text-white">{brand.name}</div>
-                            <div className="text-xs text-muted">{brand.category}</div>
+                            <div className="text-sm font-bold text-ink">{brand.name}</div>
+                            <div className="text-[11px] text-ink-tertiary">{brand.category}</div>
                           </div>
                         </Link>
                       ))}
@@ -274,22 +312,22 @@ export default function Navbar() {
                   )}
 
                   {searchResults.products.length > 0 && (
-                    <div className="p-2 border-t border-white/[0.06]">
-                      <p className="text-[11px] font-semibold text-muted uppercase tracking-widest px-3 py-2">Products</p>
+                    <div className="p-2 border-t border-ink/[0.04]">
+                      <p className="text-[10px] font-bold text-ink-tertiary tracking-[0.15em] uppercase px-3 py-2">Products</p>
                       {searchResults.products.map(product => (
                         <button
                           key={product.id}
                           onClick={() => { setSearchOpen(false); setSearchQuery(''); navigate(`/brand/${product.brandSlug}`, { state: { openProduct: product.id } }) }}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors w-full text-left"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-2 transition-colors w-full text-left"
                         >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
+                          <div className="w-11 h-11 rounded-xl overflow-hidden bg-surface-2 flex-shrink-0">
                             <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-white truncate">{product.name}</div>
-                            <div className="text-xs text-muted">{product.brandName}</div>
+                            <div className="text-sm font-bold text-ink truncate">{product.name}</div>
+                            <div className="text-[11px] text-ink-tertiary">{product.brandName}</div>
                           </div>
-                          <div className="text-sm font-bold text-accent">{product.price.toLocaleString()} EGP</div>
+                          <div className="text-xs font-bold text-accent">{product.price.toLocaleString()} EGP</div>
                         </button>
                       ))}
                     </div>
@@ -311,10 +349,10 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+      className={`px-4 py-2 text-[13px] font-medium rounded-full transition-all duration-300 ${
         isActive
-          ? 'text-white bg-white/5'
-          : 'text-muted hover:text-white hover:bg-white/5'
+          ? 'text-ink bg-ink/[0.05]'
+          : 'text-ink-secondary hover:text-ink hover:bg-ink/[0.03]'
       }`}
     >
       {children}
@@ -327,9 +365,10 @@ function MobileNavLink({ to, children, onClick }: { to: string; children: React.
     <Link
       to={to}
       onClick={onClick}
-      className="px-3 py-3.5 text-base font-semibold text-white hover:text-accent rounded-xl hover:bg-white/5 transition-all min-h-[48px] flex items-center"
+      className="flex items-center justify-between py-4 text-ink hover:text-accent transition-colors group border-b border-ink/[0.04]"
     >
-      {children}
+      <span className="text-[17px] font-bold">{children}</span>
+      <ArrowUpRight size={16} className="text-ink-faint group-hover:text-accent transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </Link>
   )
 }
