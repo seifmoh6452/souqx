@@ -166,12 +166,12 @@ export default function ProductCard({ product, onQuickView }: Props) {
 
         {/* Color selector */}
         {uniqueColors.length > 0 && (
-          <div className="flex gap-1.5 mb-3">
+          <div className="grid grid-cols-3 gap-1.5 mb-3">
             {uniqueColors.map(color => (
               <button
                 key={color}
                 onClick={(e) => { e.stopPropagation(); setSelectedColor(c => c === color ? '' : color) }}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold border transition-all min-h-[36px] ${
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold border transition-all min-h-[36px] truncate ${
                   selectedColor === color
                     ? 'bg-accent text-bg border-accent'
                     : 'bg-transparent text-muted border-white/[0.06] hover:border-white/10'
