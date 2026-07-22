@@ -171,7 +171,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
               <button
                 key={color}
                 onClick={(e) => { e.stopPropagation(); setSelectedColor(c => c === color ? '' : color) }}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold border transition-all min-h-[36px] truncate ${
+                className={`px-2 py-1.5 rounded-lg text-[10px] font-semibold border transition-all min-h-[32px] leading-tight ${
                   selectedColor === color
                     ? 'bg-accent text-bg border-accent'
                     : 'bg-transparent text-muted border-white/[0.06] hover:border-white/10'
