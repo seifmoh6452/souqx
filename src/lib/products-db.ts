@@ -33,6 +33,9 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     highCopyPrice: row.high_copy_price as number | undefined,
     masterBoxPrice: row.master_box_price as number | undefined,
     originalPrice: row.original_price as number | undefined,
+    imageColors: (row.image_colors as string[]) || [],
+    sizeChart: (row.size_chart as string) || undefined,
+    sortOrder: row.sort_order as number | undefined,
   }))
 }
 

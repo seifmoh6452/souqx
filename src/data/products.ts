@@ -151,7 +151,9 @@ export function getAllProducts(): Product[] {
 export const getTrendingProducts = () => cachedTrending
 export function getProductsByBrand(brandSlug: string): Product[] {
   if (!cacheByBrand[brandSlug]) {
-    cacheByBrand[brandSlug] = cachedAll.filter(p => p.brandSlug === brandSlug)
+    cacheByBrand[brandSlug] = cachedAll
+      .filter(p => p.brandSlug === brandSlug)
+      .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999))
   }
   return cacheByBrand[brandSlug]
 }
