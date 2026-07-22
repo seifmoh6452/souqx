@@ -63,6 +63,9 @@ export async function addSupabaseProduct(product: Product): Promise<void> {
       high_copy_price: product.highCopyPrice || null,
       master_box_price: product.masterBoxPrice || null,
       original_price: product.originalPrice || null,
+      image_colors: product.imageColors || [],
+      size_chart: product.sizeChart || null,
+      sort_order: product.sortOrder ?? null,
     }),
   })
   if (!res.ok) {
@@ -94,6 +97,9 @@ export async function updateSupabaseProduct(product: Product): Promise<void> {
       high_copy_price: product.highCopyPrice || null,
       master_box_price: product.masterBoxPrice || null,
       original_price: product.originalPrice || null,
+      image_colors: product.imageColors || [],
+      size_chart: product.sizeChart || null,
+      sort_order: product.sortOrder ?? null,
     }),
   })
   if (!res.ok) {

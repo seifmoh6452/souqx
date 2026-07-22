@@ -21,6 +21,7 @@ export default function AdminPage() {
   const [originalPrice, setOriginalPrice] = useState('')
   const [description, setDescription] = useState('')
   const [images, setImages] = useState<string[]>([])
+  const [imageColors, setImageColors] = useState<string[]>([])
   const [sizes, setSizes] = useState<string[]>([])
   const [saved, setSaved] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -103,7 +104,10 @@ export default function AdminPage() {
     if (!files) return
     Array.from(files).forEach(file => {
       const reader = new FileReader()
-      reader.onload = () => setImages(prev => [...prev, reader.result as string])
+      reader.onload = () => {
+        setImages(prev => [...prev, reader.result as string])
+        setImageColors(prev => [...prev, ''])
+      }
       reader.readAsDataURL(file)
     })
     e.target.value = ''
@@ -111,6 +115,7 @@ export default function AdminPage() {
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index))
+    setImageColors(prev => prev.filter((_, i) => i !== index))
   }
 
   const moveImage = (from: number, to: number) => {
@@ -118,6 +123,20 @@ export default function AdminPage() {
       const next = [...prev]
       const [moved] = next.splice(from, 1)
       next.splice(to, 0, moved)
+      return next
+    })
+    setImageColors(prev => {
+      const next = [...prev]
+      const [moved] = next.splice(from, 1)
+      next.splice(to, 0, moved)
+      return next
+    })
+  }
+
+  const updateImageColor = (index: number, color: string) => {
+    setImageColors(prev => {
+      const next = [...prev]
+      next[index] = color
       return next
     })
   }
@@ -129,6 +148,7 @@ export default function AdminPage() {
     setOriginalPrice('')
     setDescription('')
     setImages([])
+    setImageColors([])
     setSizes([])
     setEditingId(null)
   }
@@ -152,6 +172,7 @@ export default function AdminPage() {
             description: description || `${name} from ${brand.name}`,
             images,
             sizes: sizes.length > 0 ? sizes : undefined,
+            imageColors: imageColors.some(c => c) ? imageColors : undefined,
           })
         }
       } else {
@@ -168,6 +189,7 @@ export default function AdminPage() {
           images,
           description: description || `${name} from ${brand.name}`,
           sizes: sizes.length > 0 ? sizes : undefined,
+          imageColors: imageColors.some(c => c) ? imageColors : undefined,
           inStock: true,
           whatsappNumber: '+201001234567',
         }
@@ -194,6 +216,7 @@ export default function AdminPage() {
     setOriginalPrice(product.originalPrice ? String(product.originalPrice) : '')
     setDescription(product.description)
     setImages([...product.images])
+    setImageColors([...(product.imageColors || product.images.map(() => ''))])
     setSizes(product.sizes || [])
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -252,35 +275,44 @@ export default function AdminPage() {
             {images.length > 0 && (
               <div className="grid grid-cols-3 gap-2 mb-3">
                 {images.map((img, i) => (
-                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-white/[0.08] group">
-                    <img src={img} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
-                    {i === 0 && (
-                      <span className="absolute top-1 left-1 text-[9px] font-bold text-accent bg-black/70 rounded px-1 py-0.5">Main</span>
-                    )}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
-                      {i > 0 && (
-                        <button
-                          onClick={() => moveImage(i, i - 1)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
-                        >
-                          &#8592;
-                        </button>
+                  <div key={i} className="rounded-xl border border-white/[0.08] overflow-hidden group">
+                    <div className="relative aspect-square overflow-hidden">
+                      <img src={img} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
+                      {i === 0 && (
+                        <span className="absolute top-1 left-1 text-[9px] font-bold text-accent bg-black/70 rounded px-1 py-0.5">Main</span>
                       )}
-                      <button
-                        onClick={() => removeImage(i)}
-                        className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/20 backdrop-blur text-red-400 hover:bg-red-500/30 text-xs"
-                      >
-                        &#10005;
-                      </button>
-                      {i < images.length - 1 && (
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                        {i > 0 && (
+                          <button
+                            onClick={() => moveImage(i, i - 1)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
+                          >
+                            &#8592;
+                          </button>
+                        )}
                         <button
-                          onClick={() => moveImage(i, i + 1)}
-                          className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
+                          onClick={() => removeImage(i)}
+                          className="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/20 backdrop-blur text-red-400 hover:bg-red-500/30 text-xs"
                         >
-                          &#8594;
+                          &#10005;
                         </button>
-                      )}
+                        {i < images.length - 1 && (
+                          <button
+                            onClick={() => moveImage(i, i + 1)}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur text-white hover:bg-white/20 text-xs"
+                          >
+                            &#8594;
+                          </button>
+                        )}
+                      </div>
                     </div>
+                    <input
+                      type="text"
+                      value={imageColors[i] || ''}
+                      onChange={e => updateImageColor(i, e.target.value)}
+                      placeholder="Color"
+                      className="w-full px-2 py-1.5 bg-[#0f0f0f] text-white text-[10px] placeholder-muted focus:outline-none focus:border-accent/40 border-t border-white/[0.08]"
+                    />
                   </div>
                 ))}
               </div>
