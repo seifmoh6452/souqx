@@ -23,6 +23,7 @@ export function initEmailJS() {
 interface EmailOrder {
   id: string
   customerName: string
+  customerEmail: string
   customerPhone: string
   address: string
   city: string
@@ -55,6 +56,7 @@ export async function sendOrderEmail(order: EmailOrder): Promise<boolean> {
 
   try {
     await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      to_email: order.customerEmail,
       customer_name: order.customerName,
       customer_phone: order.customerPhone,
       address: order.address,
