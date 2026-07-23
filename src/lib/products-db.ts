@@ -9,6 +9,14 @@ const headers = {
   'Authorization': `Bearer ${SUPABASE_KEY}`,
 }
 
+function parseJsonArray(val: unknown): string[] {
+  if (Array.isArray(val)) return val.filter((c): c is string => typeof c === 'string' && !!c)
+  if (typeof val === 'string') {
+    try { const parsed = JSON.parse(val); if (Array.isArray(parsed)) return parsed.filter((c: unknown): c is string => typeof c === 'string' && !!c) } catch {}
+  }
+  return []
+}
+
 export async function fetchSupabaseProducts(): Promise<Product[]> {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/products?order=created_at.desc`, { headers })
   if (!res.ok) return []
@@ -33,7 +41,7 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     highCopyPrice: row.high_copy_price as number | undefined,
     masterBoxPrice: row.master_box_price as number | undefined,
     originalPrice: row.original_price as number | undefined,
-    imageColors: (row.image_colors as string[]) || [],
+    imageColors: parseJsonArray(row.image_colors),
     sizeChart: (row.size_chart as string) || undefined,
     sortOrder: row.sort_order as number | undefined,
   }))

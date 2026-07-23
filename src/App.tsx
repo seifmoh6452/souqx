@@ -1,7 +1,26 @@
-import { useEffect, useState } from 'react'
+import { Component, useEffect, useState, type ReactNode } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CartProvider } from './context/CartContext'
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null }
+  static getDerivedStateFromError(error: Error) { return { error } }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white p-6">
+          <p className="text-lg font-bold mb-2">Something went wrong</p>
+          <p className="text-sm text-[#555] mb-4 max-w-md text-center">{this.state.error.message}</p>
+          <button onClick={() => { this.setState({ error: null }); window.location.href = '/' }} className="px-6 py-3 bg-[#00dc82] text-[#0a0a0a] rounded-xl font-bold">
+            Reload
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import CartDrawer from './components/cart/CartDrawer'
@@ -56,15 +75,17 @@ export default function App() {
   }
 
   return (
-    <CartProvider>
-      <div className="min-h-screen bg-bg text-white">
-        <Navbar />
-        <main>
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-        <CartDrawer />
-      </div>
-    </CartProvider>
+    <ErrorBoundary>
+      <CartProvider>
+        <div className="min-h-screen bg-bg text-white">
+          <Navbar />
+          <main>
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+          <CartDrawer />
+        </div>
+      </CartProvider>
+    </ErrorBoundary>
   )
 }

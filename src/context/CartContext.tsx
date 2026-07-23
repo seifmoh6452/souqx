@@ -132,7 +132,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   })
 
   useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.items))
+    try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.items)) } catch {}
   }, [state.items])
 
   const totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0)

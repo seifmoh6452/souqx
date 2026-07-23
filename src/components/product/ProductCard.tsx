@@ -22,12 +22,13 @@ export default function ProductCard({ product, onQuickView }: Props) {
   const hasHighCopy = !!product.highCopyPrice
   const hasMasterBox = !!product.masterBoxPrice
 
-  const hasImageColors = product.imageColors && product.imageColors.some(c => c)
+  const rawColors = Array.isArray(product.imageColors) ? product.imageColors : []
+  const hasImageColors = rawColors.length > 0 && rawColors.some(c => c)
   const uniqueColors = hasImageColors
-    ? [...new Set(product.imageColors!.filter((c): c is string => !!c))]
+    ? [...new Set(rawColors.filter((c): c is string => !!c))]
     : []
-  const filteredImages = hasImageColors && selectedColor
-    ? product.images.filter((_, i) => product.imageColors![i] === selectedColor)
+  const filteredImages = (hasImageColors && selectedColor && product.images.length > 0)
+    ? (product.images.filter((_, i) => rawColors[i] === selectedColor) || product.images)
     : product.images
 
   useEffect(() => {
