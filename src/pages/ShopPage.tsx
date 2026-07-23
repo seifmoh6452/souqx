@@ -39,7 +39,9 @@ export default function ShopPage() {
   const filtered = selected
     ? selected === 'perfumes'
       ? getMymPerfumesByGender(genderTab)
-      : allProducts.filter(p => matchCategory(p, selected))
+      : allProducts
+          .filter(p => matchCategory(p, selected))
+          .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999))
     : []
 
   const handleCategoryClick = (cat: Category) => {
