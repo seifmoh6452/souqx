@@ -124,20 +124,20 @@ export default function CartDrawer() {
                             </span>
                             <div className="flex items-center gap-1">
                               <button
-                                onClick={() => updateQuantity(item.product.id, item.copyType, item.quantity - 1)}
+                                onClick={() => updateQuantity(item.product.id, item.copyType, item.quantity - 1, item.selectedSize, item.selectedColor)}
                                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.05] hover:bg-white/10 text-white transition-colors"
                               >
                                 <Minus size={13} />
                               </button>
                               <span className="w-6 text-center text-sm font-semibold text-white">{item.quantity}</span>
                               <button
-                                onClick={() => updateQuantity(item.product.id, item.copyType, item.quantity + 1)}
+                                onClick={() => updateQuantity(item.product.id, item.copyType, item.quantity + 1, item.selectedSize, item.selectedColor)}
                                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.05] hover:bg-white/10 text-white transition-colors"
                               >
                                 <Plus size={13} />
                               </button>
                               <button
-                                onClick={() => removeItem(item.product.id, item.copyType)}
+                                onClick={() => removeItem(item.product.id, item.copyType, item.selectedSize, item.selectedColor)}
                                 className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.05] hover:bg-red-500/20 hover:text-red-400 text-muted transition-all ml-0.5"
                               >
                                 <Trash2 size={13} />

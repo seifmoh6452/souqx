@@ -24,8 +24,8 @@ interface CartState {
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: { product: Product; size?: string; color?: string; copyType: CopyType } }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { productId: string; copyType: CopyType; quantity: number } }
+  | { type: 'REMOVE_ITEM'; payload: { productId: string; size?: string; color?: string; copyType: CopyType } }
+  | { type: 'UPDATE_QUANTITY'; payload: { productId: string; size?: string; color?: string; copyType: CopyType; quantity: number } }
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'OPEN_CART' }
@@ -70,19 +70,19 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case 'REMOVE_ITEM':
       return {
         ...state,
-        items: state.items.filter(item => cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) !== action.payload),
+        items: state.items.filter(item => cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) !== cartItemKey(action.payload.productId, action.payload.size, action.payload.color, action.payload.copyType)),
       }
     case 'UPDATE_QUANTITY': {
       if (action.payload.quantity <= 0) {
         return {
           ...state,
-          items: state.items.filter(item => cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) !== cartItemKey(action.payload.productId, undefined, undefined, action.payload.copyType)),
+          items: state.items.filter(item => cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) !== cartItemKey(action.payload.productId, action.payload.size, action.payload.color, action.payload.copyType)),
         }
       }
       return {
         ...state,
         items: state.items.map(item =>
-          cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) === cartItemKey(action.payload.productId, undefined, undefined, action.payload.copyType)
+          cartItemKey(item.product.id, item.selectedSize, item.selectedColor, item.copyType) === cartItemKey(action.payload.productId, action.payload.size, action.payload.color, action.payload.copyType)
             ? { ...item, quantity: action.payload.quantity }
             : item
         ),
@@ -113,8 +113,8 @@ function loadCart(): CartItem[] {
 interface CartContextValue {
   state: CartState
   addItem: (product: Product, size?: string, color?: string, copyType?: CopyType) => void
-  removeItem: (productId: string, copyType: CopyType) => void
-  updateQuantity: (productId: string, copyType: CopyType, quantity: number) => void
+  removeItem: (productId: string, copyType: CopyType, size?: string, color?: string) => void
+  updateQuantity: (productId: string, copyType: CopyType, quantity: number, size?: string, color?: string) => void
   clearCart: () => void
   toggleCart: () => void
   openCart: () => void
@@ -143,8 +143,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       value={{
         state,
         addItem: (product, size, color, copyType = 'original') => dispatch({ type: 'ADD_ITEM', payload: { product, size, color, copyType } }),
-        removeItem: (id, copyType) => dispatch({ type: 'REMOVE_ITEM', payload: cartItemKey(id, undefined, undefined, copyType) }),
-        updateQuantity: (id, copyType, qty) => dispatch({ type: 'UPDATE_QUANTITY', payload: { productId: id, copyType, quantity: qty } }),
+        removeItem: (id, copyType, size, color) => dispatch({ type: 'REMOVE_ITEM', payload: { productId: id, copyType, size, color } }),
+        updateQuantity: (id, copyType, qty, size, color) => dispatch({ type: 'UPDATE_QUANTITY', payload: { productId: id, copyType, quantity: qty, size, color } }),
         clearCart: () => dispatch({ type: 'CLEAR_CART' }),
         toggleCart: () => dispatch({ type: 'TOGGLE_CART' }),
         openCart: () => dispatch({ type: 'OPEN_CART' }),
