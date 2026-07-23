@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle, Mail } from 'lucide-react'
+import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
 import { saveOrder } from '../lib/orders'
-import { sendOrderEmail, initEmailJS } from '../lib/email'
 
 const WHATSAPP_PHONES = [
   { phone: '201111273593', apiKey: '4725541' },
@@ -17,16 +16,11 @@ export default function CheckoutPage() {
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({
     name: '',
-    email: '',
     phone: '',
     address: '',
     city: '',
     notes: '',
   })
-
-  useEffect(() => {
-    initEmailJS()
-  }, [])
 
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }))
 
@@ -62,7 +56,6 @@ export default function CheckoutPage() {
     saveOrder({
       id: Date.now().toString(),
       customerName: form.name,
-      customerEmail: form.email,
       customerPhone: form.phone,
       address: form.address,
       city: form.city,
@@ -77,25 +70,6 @@ export default function CheckoutPage() {
       })),
       total: totalPrice,
       date: new Date().toISOString(),
-    }).then(() => {
-      sendOrderEmail({
-        id: Date.now().toString(),
-        customerName: form.name,
-        customerEmail: form.email,
-        customerPhone: form.phone,
-        address: form.address,
-        city: form.city,
-        notes: form.notes,
-        items: state.items.map(item => ({
-          name: item.product.name,
-          brandName: item.product.brandName,
-          size: item.selectedSize,
-          price: getItemPrice(item.product, item.copyType),
-          quantity: item.quantity,
-        })),
-        total: totalPrice,
-        date: new Date().toISOString(),
-      }).catch(() => {})
     }).catch(() => {})
 
     clearCart()
@@ -184,23 +158,6 @@ export default function CheckoutPage() {
                   value={form.phone}
                   onChange={e => update('phone', e.target.value)}
                   placeholder="01XXXXXXXXX"
-                  className="w-full pl-10 pr-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-accent/50 transition-colors"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="text-xs text-muted font-semibold uppercase tracking-wider mb-1.5 block">
-                Email (for order confirmation)
-              </label>
-              <div className="relative">
-                <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-                <input
-                  required
-                  type="email"
-                  value={form.email}
-                  onChange={e => update('email', e.target.value)}
-                  placeholder="you@example.com"
                   className="w-full pl-10 pr-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-accent/50 transition-colors"
                 />
               </div>

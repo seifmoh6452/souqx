@@ -13,7 +13,6 @@ export interface OrderItem {
 export interface Order {
   id: string
   customerName: string
-  customerEmail: string
   customerPhone: string
   address: string
   city: string
@@ -36,7 +35,6 @@ export async function saveOrder(order: Order): Promise<void> {
     body: JSON.stringify({
       id: order.id,
       customer_name: order.customerName,
-      customer_email: order.customerEmail,
       customer_phone: order.customerPhone,
       address: order.address,
       city: order.city,
@@ -64,7 +62,6 @@ export async function getOrders(): Promise<Order[]> {
   return data.map((row: Record<string, unknown>) => ({
     id: row.id as string,
     customerName: row.customer_name as string,
-    customerEmail: (row.customer_email as string) || '',
     customerPhone: row.customer_phone as string,
     address: row.address as string,
     city: row.city as string,
