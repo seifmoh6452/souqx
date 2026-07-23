@@ -29,7 +29,9 @@ export default function CheckoutPage() {
     const lines = state.items.map(item => {
       const price = getItemPrice(item.product, item.copyType)
       const copyLabel = item.copyType === 'high-copy' ? ' (High Copy)' : item.copyType === 'master-box' ? ' (Master Box)' : ''
-      return `- ${item.product.brandName} - ${item.product.name}${copyLabel}${item.selectedSize ? ` [${item.selectedSize}]` : ''} x${item.quantity} = ${(price * item.quantity).toLocaleString()} EGP`
+      const sizeLabel = item.selectedSize ? ` [${item.selectedSize}]` : ''
+      const colorLabel = item.selectedColor ? ` (${item.selectedColor})` : ''
+      return `- ${item.product.brandName} - ${item.product.name}${copyLabel}${sizeLabel}${colorLabel} x${item.quantity} = ${(price * item.quantity).toLocaleString()} EGP`
     })
     const message = [
       '*New SOUQX Order*',
@@ -66,6 +68,7 @@ export default function CheckoutPage() {
         brandName: item.product.brandName,
         copyType: item.copyType,
         size: item.selectedSize,
+        color: item.selectedColor,
         price: getItemPrice(item.product, item.copyType),
         quantity: item.quantity,
       })),
@@ -228,13 +231,22 @@ export default function CheckoutPage() {
                 return (
                   <div key={itemKey} className="flex gap-3">
                     <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-black border border-white/[0.06]">
-                      <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                      <img src={(() => {
+                        const imgs = item.product.images
+                        const colors = Array.isArray(item.product.imageColors) ? item.product.imageColors : []
+                        if (item.selectedColor && colors.length > 0) {
+                          const match = imgs.find((_, i) => colors[i] === item.selectedColor)
+                          if (match) return match
+                        }
+                        return imgs[0]
+                      })()} alt={item.product.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-xs font-semibold truncate">{item.product.name}</p>
                       <p className="text-muted text-[11px]">
                         {item.copyType === 'high-copy' ? 'High Copy' : item.copyType === 'master-box' ? 'Master Box' : 'Original'}
                         {item.selectedSize ? ` · ${item.selectedSize}` : ''}
+                        {item.selectedColor ? ` · ${item.selectedColor}` : ''}
                       </p>
                       <div className="flex justify-between mt-1">
                         <span className="text-muted text-[11px]">×{item.quantity}</span>
