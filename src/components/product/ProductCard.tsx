@@ -60,8 +60,9 @@ export default function ProductCard({ product, onQuickView }: Props) {
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
             {filteredImages.map((_, i) => (
               <button
+                type="button"
                 key={i}
-                onClick={() => setImgIndex(i)}
+                onClick={(e) => { e.stopPropagation(); setImgIndex(i) }}
                 className={`w-1.5 h-1.5 rounded-full transition-all sm:opacity-0 sm:group-hover:opacity-100 ${i === imgIndex ? 'bg-white w-4 opacity-100' : 'bg-white/40 opacity-60 sm:opacity-0 sm:group-hover:opacity-40'}`}
               />
             ))}
@@ -226,15 +227,17 @@ export default function ProductCard({ product, onQuickView }: Props) {
         {/* Actions */}
         <div className="flex items-center justify-between">
           <motion.button
+            type="button"
             whileTap={{ scale: 0.95 }}
-            onClick={() => onQuickView(product)}
+            onClick={(e) => { e.stopPropagation(); onQuickView(product) }}
             className="text-xs text-muted hover:text-white font-medium transition-colors min-h-[44px] min-w-[44px] flex items-center justify-start"
           >
             Quick View
           </motion.button>
           <motion.button
+            type="button"
             whileTap={{ scale: 0.92 }}
-            onClick={() => addItem(product, selectedSize || undefined, undefined, copyType)}
+            onClick={(e) => { e.stopPropagation(); addItem(product, selectedSize || undefined, undefined, copyType) }}
             className="w-11 h-11 bg-accent rounded-xl flex items-center justify-center text-bg hover:bg-accent-hover hover:shadow-glow-sm transition-all"
             aria-label="Add to cart"
           >
