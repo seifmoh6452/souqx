@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
-import { saveOrder } from '../lib/orders'
+import { saveOrder, sendWhatsAppMessage, getStatusMessage } from '../lib/orders'
 
 const WHATSAPP_PHONES = [
   { phone: '201111273593', apiKey: '4725541' },
@@ -53,8 +53,9 @@ export default function CheckoutPage() {
       fetch(url, { mode: 'no-cors' }).catch(() => {})
     })
 
+    const orderId = Date.now().toString()
     saveOrder({
-      id: Date.now().toString(),
+      id: orderId,
       customerName: form.name,
       customerPhone: form.phone,
       address: form.address,
@@ -70,6 +71,9 @@ export default function CheckoutPage() {
       })),
       total: totalPrice,
       date: new Date().toISOString(),
+    }).then(() => {
+      const msg = getStatusMessage('pending', form.name, orderId)
+      sendWhatsAppMessage(form.phone, msg)
     }).catch(() => {})
 
     clearCart()

@@ -72,3 +72,39 @@ export async function getOrders(): Promise<Order[]> {
     status: row.status as string,
   }))
 }
+
+export async function updateOrderStatus(orderId: string, status: string): Promise<void> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({ status }),
+  })
+  if (!res.ok) throw new Error('Failed to update order status')
+}
+
+export function sendWhatsAppMessage(phone: string, message: string): void {
+  const clean = phone.replace(/[^0-9]/g, '')
+  const url = `https://wa.me/${clean.startsWith('20') ? clean : '20' + clean}?text=${encodeURIComponent(message)}`
+  window.open(url, '_blank')
+}
+
+export function getStatusMessage(status: string, customerName: string, orderId: string): string {
+  const shortId = orderId.slice(-6).toUpperCase()
+  switch (status) {
+    case 'confirmed':
+      return `Hi ${customerName}! Your SOUQX order #${shortId} has been confirmed. We're preparing your order now.`
+    case 'shipped':
+      return `Hi ${customerName}! Great news — your SOUQX order #${shortId} has been shipped and is on its way to you!`
+    case 'delivered':
+      return `Hi ${customerName}! Your SOUQX order #${shortId} has been delivered. Thank you for shopping with us!`
+    case 'cancelled':
+      return `Hi ${customerName}. Unfortunately your SOUQX order #${shortId} has been cancelled. Please contact us for details.`
+    default:
+      return `Hi ${customerName}! Your SOUQX order #${shortId} has been received. We'll update you soon.`
+  }
+}

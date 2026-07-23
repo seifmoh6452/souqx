@@ -2,12 +2,34 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ShoppingBag, DollarSign, TrendingUp, Users, Package, Calendar, FileText, Receipt } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getOrders, type Order } from '../lib/orders'
+import { getOrders, updateOrderStatus, sendWhatsAppMessage, getStatusMessage, type Order } from '../lib/orders'
 
 export default function AnalyticsPage() {
   const navigate = useNavigate()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
+
+  const handleStatusUpdate = async (order: Order, newStatus: string) => {
+    setUpdatingStatus(order.id)
+    try {
+      await updateOrderStatus(order.id, newStatus)
+      setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: newStatus } : o))
+      const msg = getStatusMessage(newStatus, order.customerName, order.id)
+      sendWhatsAppMessage(order.customerPhone, msg)
+    } catch {
+    } finally {
+      setUpdatingStatus(null)
+    }
+  }
+
+  const statusColors: Record<string, string> = {
+    pending: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    confirmed: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    shipped: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    delivered: 'bg-green-500/10 text-green-400 border-green-500/20',
+    cancelled: 'bg-red-500/10 text-red-400 border-red-500/20',
+  }
 
   useEffect(() => {
     getOrders()
@@ -260,7 +282,12 @@ ${order.notes ? `<div style="background:#f9f9f9;border-radius:8px;padding:10px;m
                 <div key={order.id} className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="text-white font-semibold text-sm">{order.customerName}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-white font-semibold text-sm">{order.customerName}</p>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusColors[order.status || 'pending'] || statusColors.pending}`}>
+                          {(order.status || 'pending').toUpperCase()}
+                        </span>
+                      </div>
                       <p className="text-muted text-xs">{order.customerPhone}</p>
                     </div>
                     <div className="text-right">
@@ -269,7 +296,7 @@ ${order.notes ? `<div style="background:#f9f9f9;border-radius:8px;padding:10px;m
                     </div>
                   </div>
                   <p className="text-muted text-xs mb-2">{order.address}, {order.city}</p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 mb-3">
                     {order.items.map((item, j) => (
                       <span key={j} className="text-[11px] bg-white/[0.06] border border-white/[0.08] rounded-lg px-2 py-1 text-muted">
                         {item.brandName} - {item.name} ×{item.quantity}
@@ -278,9 +305,28 @@ ${order.notes ? `<div style="background:#f9f9f9;border-radius:8px;padding:10px;m
                     ))}
                   </div>
                   {order.notes && (
-                    <p className="text-muted text-[11px] mt-2 italic">Note: {order.notes}</p>
+                    <p className="text-muted text-[11px] mb-3 italic">Note: {order.notes}</p>
                   )}
-                  <div className="flex gap-2 mt-3 pt-3 border-t border-white/[0.06]">
+
+                  {/* Status Actions */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {(['pending', 'confirmed', 'shipped', 'delivered'] as const).map(status => (
+                      <button
+                        key={status}
+                        onClick={() => handleStatusUpdate(order, status)}
+                        disabled={order.status === status || updatingStatus === order.id}
+                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all capitalize ${
+                          order.status === status
+                            ? `${statusColors[status]} ring-1 ring-white/10`
+                            : 'bg-white/[0.02] text-muted border-white/[0.06] hover:border-white/15 hover:text-white'
+                        } ${updatingStatus === order.id ? 'opacity-50 pointer-events-none' : ''}`}
+                      >
+                        {updatingStatus === order.id && order.status !== status ? '...' : status}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex gap-2 pt-3 border-t border-white/[0.06]">
                     <button
                       onClick={() => generateInvoice(order)}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-muted hover:text-white hover:bg-white/[0.1] text-[11px] font-semibold transition-all"
