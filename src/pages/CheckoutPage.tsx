@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
 import { saveOrder } from '../lib/orders'
+import { sendOrderEmail, initEmailJS } from '../lib/email'
 
 const WHATSAPP_PHONES = [
   { phone: '201111273593', apiKey: '4725541' },
@@ -21,6 +22,10 @@ export default function CheckoutPage() {
     city: '',
     notes: '',
   })
+
+  useEffect(() => {
+    initEmailJS()
+  }, [])
 
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }))
 
@@ -70,6 +75,24 @@ export default function CheckoutPage() {
       })),
       total: totalPrice,
       date: new Date().toISOString(),
+    }).then(() => {
+      sendOrderEmail({
+        id: Date.now().toString(),
+        customerName: form.name,
+        customerPhone: form.phone,
+        address: form.address,
+        city: form.city,
+        notes: form.notes,
+        items: state.items.map(item => ({
+          name: item.product.name,
+          brandName: item.product.brandName,
+          size: item.selectedSize,
+          price: getItemPrice(item.product, item.copyType),
+          quantity: item.quantity,
+        })),
+        total: totalPrice,
+        date: new Date().toISOString(),
+      }).catch(() => {})
     }).catch(() => {})
 
     clearCart()
