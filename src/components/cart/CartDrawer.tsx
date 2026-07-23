@@ -92,7 +92,15 @@ export default function CartDrawer() {
                         {/* Image */}
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 bg-black">
                           <img
-                            src={item.product.images[0]}
+                            src={(() => {
+                              const imgs = item.product.images
+                              const colors = Array.isArray(item.product.imageColors) ? item.product.imageColors : []
+                              if (item.selectedColor && colors.length > 0) {
+                                const match = imgs.find((_, i) => colors[i] === item.selectedColor)
+                                if (match) return match
+                              }
+                              return imgs[0]
+                            })()}
                             alt={item.product.name}
                             className="w-full h-full object-cover"
                           />

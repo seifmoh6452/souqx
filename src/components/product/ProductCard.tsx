@@ -238,7 +238,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
           <motion.button
             type="button"
             whileTap={{ scale: 0.92 }}
-            onClick={(e) => { e.stopPropagation(); addItem(product, selectedSize || undefined, undefined, copyType) }}
+            onClick={(e) => { e.stopPropagation(); addItem(product, selectedSize || undefined, selectedColor || undefined, copyType) }}
             className="w-11 h-11 bg-accent rounded-xl flex items-center justify-center text-bg hover:bg-accent-hover hover:shadow-glow-sm transition-all"
             aria-label="Add to cart"
           >
