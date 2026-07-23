@@ -88,9 +88,14 @@ export async function updateOrderStatus(orderId: string, status: string): Promis
 }
 
 export function sendWhatsAppMessage(phone: string, message: string): void {
+  const WHATSAPP_PHONES = [
+    { phone: '201111273593', apiKey: '4725541' },
+    { phone: '201030803000', apiKey: '2831907' },
+  ]
   const clean = phone.replace(/[^0-9]/g, '')
-  const url = `https://wa.me/${clean.startsWith('20') ? clean : '20' + clean}?text=${encodeURIComponent(message)}`
-  window.open(url, '_blank')
+  const to = clean.startsWith('20') ? clean : '20' + clean
+  const url = `https://api.callmebot.com/whatsapp.php?phone=${to}&text=${encodeURIComponent(message)}&apikey=${WHATSAPP_PHONES[0].apiKey}`
+  fetch(url, { mode: 'no-cors' }).catch(() => {})
 }
 
 export function getStatusMessage(status: string, customerName: string, orderId: string): string {
