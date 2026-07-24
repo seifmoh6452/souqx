@@ -10,7 +10,8 @@ const logoMap: Record<string, { src: string; bg: 'dark' | 'light' | 'blue' }> = 
   glasswear:  { src: '/logos/glasswear.jpeg',  bg: 'light' },
   watcher:    { src: '/logos/watcheye.jpeg',   bg: 'blue'  },
   watcheye:   { src: '/logos/watcheye.jpeg',   bg: 'blue'  },
-  wantsneeds: { src: '/logos/wantsneeds.jpeg', bg: 'blue'  },
+  wantsneeds:  { src: '/logos/wantsneeds.jpeg', bg: 'blue'  },
+  cleanfits:   { src: '/logos/cleanfits.jpeg',  bg: 'dark'  },
 }
 
 export default function BrandLogo({ slug, className = '', size = 40 }: Props) {

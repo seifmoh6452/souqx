@@ -21,7 +21,7 @@ const categories: { id: Category; label: string; icon: typeof Sparkles; desc: st
 function matchCategory(product: Product, cat: Category): boolean {
   const c = product.category.toLowerCase()
   if (cat === 'perfumes') return c === 'perfumes' || product.brandSlug === 'mym'
-  if (cat === 'clothes') return c === 't-shirts' || c === 'hoodies' || c === 'sets' || c === 'pants' || c === 'fashion' || product.brandSlug === 'modesta'
+  if (cat === 'clothes') return c === 't-shirts' || c === 'hoodies' || c === 'sets' || c === 'pants' || c === 'fashion' || c === 'clothing' || product.brandSlug === 'modesta' || product.brandSlug === 'cleanfits'
   if (cat === 'basics') return product.brandSlug === 'girlmath'
   if (cat === 'glasses') return product.brandSlug === 'glasswear' || c === 'eyewear' && product.brandSlug === 'glasswear'
   if (cat === 'watches') return product.brandSlug === 'watcheye' || c === 'watches'
