@@ -1,5 +1,5 @@
 import { mymPerfumes } from './mym-perfumes'
-import { fetchSupabaseProducts } from '../lib/products-db'
+import { cloudProducts as initialCloudProducts } from './cloud-products'
 
 export interface Product {
   id: string
@@ -119,10 +119,10 @@ export const products: Product[] = [
   ...modestaProducts,
 ]
 
-let cloudProducts: Product[] = []
-let cachedAll: Product[] = [...products]
+let cloudProducts: Product[] = [...initialCloudProducts]
+let cachedAll: Product[] = [...products, ...cloudProducts]
 let cacheByBrand: Record<string, Product[]> = {}
-let cachedTrending: Product[] = products.filter(p => p.trending)
+let cachedTrending: Product[] = cachedAll.filter(p => p.trending)
 
 function rebuildCache() {
   cachedAll = [...products, ...cloudProducts]
@@ -131,11 +131,7 @@ function rebuildCache() {
 }
 
 export async function loadCloudProducts(): Promise<Product[]> {
-  try {
-    cloudProducts = await fetchSupabaseProducts()
-  } catch {
-    cloudProducts = []
-  }
+  // Products are now hardcoded — this is a no-op that rebuilds the cache
   rebuildCache()
   return cloudProducts
 }
