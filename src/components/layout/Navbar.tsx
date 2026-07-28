@@ -110,12 +110,11 @@ export default function Navbar() {
                           className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors group"
                         >
                           <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0" style={{ background: '#090909' }}>
-                            <img
-                              src={`/logos/${brand.slug}.jpeg`}
-                              alt={brand.name}
-                              className="w-full h-full object-cover"
-                              style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }}
-                            />
+                            {brand.logo ? (
+                              <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }} />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white/20">{brand.name.slice(0, 2)}</div>
+                            )}
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white group-hover:text-accent transition-colors">{brand.name}</div>
@@ -262,7 +261,7 @@ export default function Navbar() {
                           className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
                         >
                           <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-[#090909]">
-                            <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" />
+                            {brand.logo ? <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white/20">{brand.name.slice(0, 2)}</div>}
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white">{brand.name}</div>

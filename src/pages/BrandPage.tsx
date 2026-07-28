@@ -79,12 +79,11 @@ export default function BrandPage() {
           {/* Logo + Brand info */}
           <div className="flex items-center gap-4 sm:gap-5 mb-4">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-card border border-white/10 flex-shrink-0" style={{ background: '#090909' }}>
-              <img
-                src={`/logos/${brand.slug}.jpeg`}
-                alt={brand.name}
-                className="w-full h-full object-cover"
-                style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }}
-              />
+              {brand.logo ? (
+                <img src={`/logos/${brand.slug}.jpeg`} alt={brand.name} className="w-full h-full object-cover" style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-2xl font-black text-white/10">{brand.name.slice(0, 2)}</div>
+              )}
             </div>
             <div>
               <p className="text-xs sm:text-sm font-semibold mb-1" style={{ color: brand.accentColor }}>{brand.category}</p>

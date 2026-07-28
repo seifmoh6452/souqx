@@ -46,16 +46,20 @@ export default function FeaturedBrands() {
               <Link to={`/brand/${brand.slug}`} className="block">
                 {/* Full area = #090909, logo fills it, white bg removed via mix-blend-mode */}
                 <div className="relative h-56 overflow-hidden" style={{ background: '#090909' }}>
-                  <motion.img
-                    src={`/logos/${brand.slug}.jpeg`}
-                    alt={brand.name}
-                    whileHover={{ scale: 1.06 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="w-full h-full object-cover"
-                    style={{
-                      mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal',
-                    }}
-                  />
+                  {brand.logo ? (
+                    <motion.img
+                      src={`/logos/${brand.slug}.jpeg`}
+                      alt={brand.name}
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="w-full h-full object-cover"
+                      style={{ mixBlendMode: brand.logoBg === 'light' ? 'screen' : 'normal' }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-4xl font-black text-white/10">{brand.name.slice(0, 2)}</span>
+                    </div>
+                  )}
                   {/* Bottom fade */}
                   <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#121212] to-transparent pointer-events-none" />
                 </div>
