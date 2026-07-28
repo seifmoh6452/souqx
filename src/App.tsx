@@ -31,6 +31,7 @@ import AdminPage from './pages/AdminPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ShopPage from './pages/ShopPage'
 import AnalyticsPage from './pages/AnalyticsPage'
+import AdminPromosPage from './pages/AdminPromosPage'
 import { loadCloudProducts } from './data/products'
 
 const pageVariants = {
@@ -53,6 +54,7 @@ function AnimatedRoutes() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/admin/analytics" element={<AnalyticsPage />} />
+          <Route path="/admin/promos" element={<AdminPromosPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

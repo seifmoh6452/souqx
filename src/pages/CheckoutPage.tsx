@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Package, MapPin, Phone, User, FileText, CheckCircle, Tag } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
 import { saveOrder, sendWhatsAppMessage, getStatusMessage } from '../lib/orders'
+import { validatePromoCode } from '../lib/promos'
 
 const DELIVERY_FEE = 100
 
@@ -25,6 +26,28 @@ export default function CheckoutPage() {
   })
 
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }))
+  const [promoInput, setPromoInput] = useState('')
+  const [promoDiscount, setPromoDiscount] = useState(0)
+  const [promoError, setPromoError] = useState('')
+  const [promoApplied, setPromoApplied] = useState('')
+
+  const finalTotal = totalPrice + DELIVERY_FEE - promoDiscount
+
+  const handleApplyPromo = async () => {
+    const code = promoInput.trim()
+    if (!code) return
+    setPromoError('')
+    setPromoApplied('')
+    const result = await validatePromoCode(code)
+    if (result) {
+      setPromoDiscount(result.discount)
+      setPromoApplied(result.code)
+      setPromoInput('')
+    } else {
+      setPromoError('Invalid promo code')
+      setPromoDiscount(0)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,7 +70,9 @@ export default function CheckoutPage() {
       '--- Items ---',
       ...lines,
       '',
-      `*Total: ${(totalPrice + DELIVERY_FEE).toLocaleString()} EGP (incl. ${DELIVERY_FEE} EGP delivery)*`,
+      promoApplied ? `Promo: ${promoApplied} (-${promoDiscount} EGP)` : '',
+      '',
+      `*Total: ${finalTotal.toLocaleString()} EGP (incl. ${DELIVERY_FEE} EGP delivery)*`,
       '',
       'Shipping to be confirmed.',
     ].filter(Boolean).join('\n')
@@ -74,7 +99,7 @@ export default function CheckoutPage() {
         price: getItemPrice(item.product, item.copyType),
         quantity: item.quantity,
       })),
-      total: totalPrice + DELIVERY_FEE,
+      total: finalTotal,
       date: new Date().toISOString(),
     }).then(() => {
       const msg = getStatusMessage('pending', form.name, orderId)
@@ -226,6 +251,28 @@ export default function CheckoutPage() {
               Order Summary
             </h2>
 
+            <div className="flex gap-2 mb-4">
+              <div className="relative flex-1">
+                <Tag size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  type="text"
+                  value={promoInput}
+                  onChange={e => { setPromoInput(e.target.value); setPromoError('') }}
+                  placeholder="Promo code"
+                  className="w-full pl-9 pr-3 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-xl text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-accent/50 transition-colors"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleApplyPromo}
+                className="px-4 py-2.5 bg-accent hover:bg-accent-hover text-bg font-bold rounded-xl text-xs transition-colors"
+              >
+                Apply
+              </button>
+            </div>
+            {promoError && <p className="text-red-400 text-[11px] -mt-3 mb-3">{promoError}</p>}
+            {promoApplied && <p className="text-accent text-[11px] -mt-3 mb-3">Code applied! {promoDiscount} EGP off</p>}
+
             <div className="space-y-3 mb-4 max-h-[300px] overflow-y-auto">
               {state.items.map(item => {
                 const price = getItemPrice(item.product, item.copyType)
@@ -261,6 +308,12 @@ export default function CheckoutPage() {
             </div>
 
             <div className="border-t border-white/[0.06] pt-3 space-y-2">
+              {promoApplied && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">Promo ({promoApplied})</span>
+                  <span className="text-accent font-semibold">-{promoDiscount} EGP</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm">
                 <span className="text-muted">Subtotal</span>
                 <span className="text-white font-semibold">{totalPrice.toLocaleString()} EGP</span>
@@ -271,7 +324,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-base font-bold pt-2 border-t border-white/[0.06]">
                 <span className="text-white">Total</span>
-                <span className="text-accent">{(totalPrice + DELIVERY_FEE).toLocaleString()} EGP</span>
+                <span className="text-accent">{(totalPrice + DELIVERY_FEE - promoDiscount).toLocaleString()} EGP</span>
               </div>
             </div>
 

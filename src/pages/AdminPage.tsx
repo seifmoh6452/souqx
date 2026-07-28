@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp, Lock } from 'lucide-react'
+import { Upload, Plus, Trash2, Pencil, ArrowLeft, X, Check, TrendingUp, Lock, Tag } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { brands } from '../data/brands'
 import { getAllProducts, getCloudProducts, loadCloudProducts } from '../data/products'
@@ -244,8 +244,14 @@ export default function AdminPage() {
           </Link>
           <Link to="/admin/analytics">
             <motion.div whileHover={{ x: 4 }} className="flex items-center gap-2 text-accent hover:text-accent/80 text-sm font-semibold transition-colors">
-              Order Analytics
+              Analytics
               <TrendingUp size={15} />
+            </motion.div>
+          </Link>
+          <Link to="/admin/promos">
+            <motion.div whileHover={{ x: 4 }} className="flex items-center gap-2 text-accent hover:text-accent/80 text-sm font-semibold transition-colors">
+              Promos
+              <Tag size={15} />
             </motion.div>
           </Link>
         </div>
