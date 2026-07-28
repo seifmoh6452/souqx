@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { useCart, getItemPrice } from '../context/CartContext'
 import { saveOrder, sendWhatsAppMessage, getStatusMessage } from '../lib/orders'
 
+const DELIVERY_FEE = 100
+
 const WHATSAPP_PHONES = [
   { phone: '201111273593', apiKey: '4725541' },
   { phone: '201030803000', apiKey: '2831907' },
@@ -45,7 +47,7 @@ export default function CheckoutPage() {
       '--- Items ---',
       ...lines,
       '',
-      `*Total: ${totalPrice.toLocaleString()} EGP*`,
+      `*Total: ${(totalPrice + DELIVERY_FEE).toLocaleString()} EGP (incl. ${DELIVERY_FEE} EGP delivery)*`,
       '',
       'Shipping to be confirmed.',
     ].filter(Boolean).join('\n')
@@ -72,7 +74,7 @@ export default function CheckoutPage() {
         price: getItemPrice(item.product, item.copyType),
         quantity: item.quantity,
       })),
-      total: totalPrice,
+      total: totalPrice + DELIVERY_FEE,
       date: new Date().toISOString(),
     }).then(() => {
       const msg = getStatusMessage('pending', form.name, orderId)
@@ -265,11 +267,11 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted">Shipping</span>
-                <span className="text-white font-semibold">Upon confirmation</span>
+                <span className="text-accent font-semibold">{DELIVERY_FEE} EGP</span>
               </div>
               <div className="flex justify-between text-base font-bold pt-2 border-t border-white/[0.06]">
                 <span className="text-white">Total</span>
-                <span className="text-accent">{totalPrice.toLocaleString()} EGP</span>
+                <span className="text-accent">{(totalPrice + DELIVERY_FEE).toLocaleString()} EGP</span>
               </div>
             </div>
 
