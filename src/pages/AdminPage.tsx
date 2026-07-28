@@ -379,7 +379,7 @@ export default function AdminPage() {
           <div>
             <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Sizes (optional)</label>
             <div className="flex flex-wrap gap-2">
-              {(brandSlug === 'footwear' || brandSlug === 'shoes' ? ['38', '39', '40', '41', '42', '43', '44', '45'] : ['S', 'M', 'L', 'XL', 'XXL']).map(size => (
+              {(brandSlug === 'footwear' || brandSlug === 'shoes' ? ['37', '38', '39', '40', '41', '42', '43', '44', '45'] : ['S', 'M', 'L', 'XL', 'XXL']).map(size => (
                 <button
                   key={size}
                   type="button"
