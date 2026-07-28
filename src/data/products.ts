@@ -1,5 +1,6 @@
 import { mymPerfumes } from './mym-perfumes'
 import { cloudProducts as initialCloudProducts } from './cloud-products'
+import { fetchSupabaseProducts } from '../lib/products-db'
 
 export interface Product {
   id: string
@@ -131,7 +132,13 @@ function rebuildCache() {
 }
 
 export async function loadCloudProducts(): Promise<Product[]> {
-  // Products are now hardcoded — this is a no-op that rebuilds the cache
+  try {
+    const supabase = await fetchSupabaseProducts()
+    const localIds = new Set(cloudProducts.map(p => p.id))
+    for (const p of supabase) {
+      if (!localIds.has(p.id)) cloudProducts.push(p)
+    }
+  } catch {}
   rebuildCache()
   return cloudProducts
 }
