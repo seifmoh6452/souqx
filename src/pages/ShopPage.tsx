@@ -27,7 +27,7 @@ function matchCategory(product: Product, cat: Category): boolean {
   if (cat === 'glasses') return product.brandSlug === 'glasswear' || c === 'eyewear' && product.brandSlug === 'glasswear'
   if (cat === 'watches') return product.brandSlug === 'watcheye' || c === 'watches'
   if (cat === 'accessories') return product.brandSlug === 'wantsneeds'
-  if (cat === 'shoes') return product.brandSlug === 'shoes'
+  if (cat === 'shoes') return product.brandSlug === 'footwear' || product.brandSlug === 'shoes' || c === 'shoes' || c === 'footwear'
   return false
 }
 
