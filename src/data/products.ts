@@ -136,7 +136,12 @@ export async function loadCloudProducts(): Promise<Product[]> {
     const supabase = await fetchSupabaseProducts()
     const localIds = new Set(cloudProducts.map(p => p.id))
     for (const p of supabase) {
-      if (!localIds.has(p.id)) cloudProducts.push(p)
+      if (localIds.has(p.id)) {
+        const idx = cloudProducts.findIndex(c => c.id === p.id)
+        if (idx >= 0) cloudProducts[idx] = p
+      } else {
+        cloudProducts.push(p)
+      }
     }
   } catch {}
   rebuildCache()
