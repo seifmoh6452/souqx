@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ShoppingBag, Heart, Minus, Plus } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { useCart, getItemPrice, type CopyType } from '../../context/CartContext'
+import { useToast } from '../layout/Toast'
 import { getAllProducts } from '../../data/products'
 
 interface Props {
@@ -20,6 +21,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
   const [wishlist, setWishlist] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
   const { addItem } = useCart()
+  const { show } = useToast()
 
   useEffect(() => {
     document.body.style.overflow = product ? 'hidden' : ''
@@ -69,6 +71,7 @@ export default function ProductModal({ product, onClose, onSelectProduct }: Prop
 
   const handleAddToCart = () => {
     addItem(product, selectedSize || undefined, selectedColor || undefined, copyType)
+    show('Added to cart!')
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 2000)
   }

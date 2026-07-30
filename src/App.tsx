@@ -24,6 +24,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import CartDrawer from './components/cart/CartDrawer'
+import { ToastProvider } from './components/layout/Toast'
 import HomePage from './pages/HomePage'
 import BrandPage from './pages/BrandPage'
 import BecomeSellerPage from './pages/BecomeSellerPage'
@@ -79,14 +80,16 @@ export default function App() {
   return (
     <ErrorBoundary>
       <CartProvider>
-        <div className="min-h-screen bg-bg text-white">
-          <Navbar />
-          <main>
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-          <CartDrawer />
-        </div>
+        <ToastProvider>
+          <div className="min-h-screen bg-bg text-white">
+            <Navbar />
+            <main>
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+            <CartDrawer />
+          </div>
+        </ToastProvider>
       </CartProvider>
     </ErrorBoundary>
   )

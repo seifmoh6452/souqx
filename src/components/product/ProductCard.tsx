@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ShoppingBag, Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { useCart, getItemPrice, type CopyType } from '../../context/CartContext'
+import { useToast } from '../layout/Toast'
 import BrandLogo from '../brand/BrandLogo'
 
 interface Props {
@@ -17,6 +18,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
   const { addItem } = useCart()
+  const { show } = useToast()
 
   const displayPrice = getItemPrice(product, copyType)
   const hasHighCopy = !!product.highCopyPrice
@@ -238,7 +240,7 @@ export default function ProductCard({ product, onQuickView }: Props) {
           <motion.button
             type="button"
             whileTap={{ scale: 0.92 }}
-            onClick={(e) => { e.stopPropagation(); addItem(product, selectedSize || undefined, selectedColor || undefined, copyType) }}
+            onClick={(e) => { e.stopPropagation(); addItem(product, selectedSize || undefined, selectedColor || undefined, copyType); show('Added to cart!') }}
             className="w-11 h-11 bg-accent rounded-xl flex items-center justify-center text-bg hover:bg-accent-hover hover:shadow-glow-sm transition-all"
             aria-label="Add to cart"
           >
