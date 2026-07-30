@@ -5,6 +5,7 @@ const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KE
 export interface PromoCode {
   code: string
   discount: number
+  type: 'fixed' | 'percent'
   created_at?: string
 }
 
@@ -14,11 +15,11 @@ export async function getPromoCodes(): Promise<PromoCode[]> {
   return await res.json()
 }
 
-export async function addPromoCode(code: string, discount: number): Promise<void> {
+export async function addPromoCode(code: string, discount: number, type: 'fixed' | 'percent'): Promise<void> {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/promo_codes`, {
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ code: code.toUpperCase(), discount }),
+    body: JSON.stringify({ code: code.toUpperCase(), discount, type }),
   })
   if (!res.ok) throw new Error('Failed to add promo code')
 }

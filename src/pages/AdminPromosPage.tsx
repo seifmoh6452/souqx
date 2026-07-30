@@ -9,6 +9,7 @@ export default function AdminPromosPage() {
   const [codes, setCodes] = useState<PromoCode[]>([])
   const [code, setCode] = useState('')
   const [discount, setDiscount] = useState('')
+  const [discountType, setDiscountType] = useState<'fixed' | 'percent'>('fixed')
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -23,9 +24,10 @@ export default function AdminPromosPage() {
     if (!code.trim() || !discount) return
     setLoading(true)
     try {
-      await addPromoCode(code.trim(), Number(discount))
+      await addPromoCode(code.trim(), Number(discount), discountType)
       setCode('')
       setDiscount('')
+      setDiscountType('fixed')
       setMsg(`Code "${code.trim().toUpperCase()}" added`)
       await load()
     } catch {
@@ -67,12 +69,39 @@ export default function AdminPromosPage() {
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Discount (EGP)</label>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">Discount Type</label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setDiscountType('fixed')}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-all ${
+                  discountType === 'fixed'
+                    ? 'bg-accent text-bg border-accent'
+                    : 'bg-[#0f0f0f] text-muted border-white/[0.08] hover:border-white/20'
+                }`}
+              >
+                Fixed (EGP)
+              </button>
+              <button
+                type="button"
+                onClick={() => setDiscountType('percent')}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-bold border transition-all ${
+                  discountType === 'percent'
+                    ? 'bg-accent text-bg border-accent'
+                    : 'bg-[#0f0f0f] text-muted border-white/[0.08] hover:border-white/20'
+                }`}
+              >
+                Percentage (%)
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-muted uppercase tracking-widest mb-2 block">{discountType === 'fixed' ? 'Discount (EGP)' : 'Discount (%)'}</label>
             <input
               type="number"
               value={discount}
               onChange={e => setDiscount(e.target.value)}
-              placeholder="e.g. 200"
+              placeholder={discountType === 'fixed' ? 'e.g. 200' : 'e.g. 10'}
               className="w-full px-4 py-3 bg-[#0f0f0f] border border-white/[0.08] rounded-xl text-white text-sm placeholder-muted focus:outline-none focus:border-accent/40"
             />
           </div>
@@ -104,7 +133,7 @@ export default function AdminPromosPage() {
                   </div>
                   <div>
                     <p className="text-white text-sm font-bold">{c.code}</p>
-                    <p className="text-accent text-xs font-semibold">{c.discount} EGP off</p>
+                    <p className="text-accent text-xs font-semibold">{c.type === 'percent' ? `${c.discount}% off` : `${c.discount} EGP off`}</p>
                   </div>
                 </div>
                 <button onClick={() => handleDelete(c.code)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all">

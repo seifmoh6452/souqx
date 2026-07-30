@@ -28,6 +28,7 @@ export default function CheckoutPage() {
   const update = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }))
   const [promoInput, setPromoInput] = useState('')
   const [promoDiscount, setPromoDiscount] = useState(0)
+  const [promoType, setPromoType] = useState<'fixed' | 'percent'>('fixed')
   const [promoError, setPromoError] = useState('')
   const [promoApplied, setPromoApplied] = useState('')
 
@@ -40,7 +41,9 @@ export default function CheckoutPage() {
     setPromoApplied('')
     const result = await validatePromoCode(code)
     if (result) {
-      setPromoDiscount(result.discount)
+      const discount = result.type === 'percent' ? Math.round(totalPrice * result.discount / 100) : result.discount
+      setPromoDiscount(discount)
+      setPromoType(result.type)
       setPromoApplied(result.code)
       setPromoInput('')
     } else {
@@ -70,7 +73,7 @@ export default function CheckoutPage() {
       '--- Items ---',
       ...lines,
       '',
-      promoApplied ? `Promo: ${promoApplied} (-${promoDiscount} EGP)` : '',
+      promoApplied ? `Promo: ${promoApplied} (${promoType === 'percent' ? `${promoDiscount} EGP off` : `-${promoDiscount} EGP`})` : '',
       '',
       `*Total: ${finalTotal.toLocaleString()} EGP (incl. ${DELIVERY_FEE} EGP delivery)*`,
       '',
@@ -271,7 +274,7 @@ export default function CheckoutPage() {
               </button>
             </div>
             {promoError && <p className="text-red-400 text-[11px] -mt-3 mb-3">{promoError}</p>}
-            {promoApplied && <p className="text-accent text-[11px] -mt-3 mb-3">Code applied! {promoDiscount} EGP off</p>}
+            {promoApplied && <p className="text-accent text-[11px] -mt-3 mb-3">Code applied! {promoType === 'percent' ? `${promoDiscount} EGP off` : `${promoDiscount} EGP off`}</p>}
 
             <div className="space-y-3 mb-4 max-h-[300px] overflow-y-auto">
               {state.items.map(item => {
