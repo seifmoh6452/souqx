@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'https://fftiqtfuphzxjcsrrbbg.supabase.co'
-const SUPABASE_KEY = 'sb_publishable_mNq8ThTap5g3Xa_2sddwiw_1hYOG0bA'
+const SUPABASE_URL = 'https://fowejnpsictuquxdpzww.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_lDRUcKy5orqHOBnNYiq0DQ_knQ8Ayqv'
 const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
 
 export interface PromoCode {
